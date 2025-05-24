@@ -1,1 +1,589 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة تخمين الكلمات - مخطوطة الألغاز الذكية</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* --- Font Definition --- */
+        @font-face {
+            font-family: 'AA-Galaxy';
+            src: url('AA-GALAXY.woff2') format('woff2'),
+                 url('AA-GALAXY.ttf') format('truetype'),
+                 url('AA-GALAXY.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            font-family: 'AA-Galaxy', 'Georgia', serif;
+            overflow-y: auto; 
+            overflow-x: hidden;
+            background-color: #e8d9c3; 
+            color: #4a3b31; 
+            min-height: 100vh;
+            padding-top: 1.5rem;
+            padding-bottom: 1.5rem;
+            position: relative;
+        }
+
+        body::before { /* Dust motes background */
+            content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/dust.png');
+            opacity: 0.08; animation: slowPan 120s linear infinite; z-index: -2;
+        }
+        @keyframes slowPan { 0% { background-position: 0% 0%; } 100% { background-position: 100% 100%; } }
+
+        .scroll-input, .scroll-select {
+            background-color: rgba(224, 206, 177, 0.85); border: 1px solid #a1887f; color: #3e2e25; 
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.15), 0 1px 1px rgba(0,0,0,0.03);
+            transition: all 0.3s ease; border-radius: 0.3rem; padding: 0.875rem; 
+            font-size: 1.125rem; width: 100%;
+        }
+        .scroll-input:focus, .scroll-select:focus {
+            outline: none; box-shadow: inset 0 1px 4px rgba(0,0,0,0.25), 0 0 10px rgba(210, 170, 120, 0.7);
+            border-color: #795548; background-color: rgba(235, 217, 188, 0.95);
+        }
+        .scroll-button {
+            background-color: #795548; color: #f5e9d3; border: 1px solid #5d4037; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.25), inset 0 -2px 2px rgba(0,0,0,0.1);
+            transition: all 0.2s ease-out; text-transform: uppercase; letter-spacing: 1.2px;
+            font-weight: bold; border-radius: 0.3rem; padding: 0.875rem; 
+            font-size: 1.125rem; width: 100%; cursor: pointer;
+        }
+        .scroll-button:hover {
+            background-color: #6d4c41; transform: translateY(-2px);
+            box-shadow: 0 3px 7px rgba(0,0,0,0.3), inset 0 -2px 2px rgba(0,0,0,0.1);
+        }
+        .scroll-button:active { transform: translateY(0px); box-shadow: 0 1px 3px rgba(0,0,0,0.2), inset 0 -1px 1px rgba(0,0,0,0.1); }
+        .scroll-button:disabled { background-color: #bcaaa4; color: #efebe9; box-shadow: none; cursor: not-allowed; }
+
+        .letter-box {
+            width: 60px; height: 60px; border: 1.5px solid #bcaaa4; display: flex;
+            justify-content: center; align-items: center; font-size: 2rem; font-weight: normal;
+            margin: 5px; border-radius: 3px; 
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1), text-shadow 0.4s ease-out, box-shadow 0.4s ease-out;
+            text-transform: uppercase; background-color: rgba(245, 233, 211, 0.2); 
+            color: #6d4c41; position: relative;
+        }
+        .letter-box.lang-en { font-family: 'Georgia', serif; font-size: 1.8rem; }
+        .letter-box.green {
+            background-color: rgba(165, 214, 167, 0.4); border-color: #66bb6a; color: #2e7d32; 
+            text-shadow: 0 0 12px #a5d6a7, 0 0 18px #a5d6a7, 0 0 25px #e8f5e9; 
+            box-shadow: 0 0 8px rgba(102, 187, 106, 0.5); transform: scale(1.03);
+            animation: pulseGlowGreenImproved 2s infinite alternate ease-in-out;
+        }
+        @keyframes pulseGlowGreenImproved {
+            from { text-shadow: 0 0 10px #9ccc9c, 0 0 15px #9ccc9c, 0 0 22px #e8f5e9; box-shadow: 0 0 6px rgba(102, 187, 106, 0.4); }
+            to { text-shadow: 0 0 18px #a5d6a7, 0 0 25px #a5d6a7, 0 0 35px #e8f5e9; box-shadow: 0 0 12px rgba(102, 187, 106, 0.7); }
+        }
+        .letter-box.yellow {
+            background-color: rgba(255, 224, 178, 0.4); border-color: #ffa726; color: #e65100; 
+            text-shadow: 0 0 12px #ffcc80, 0 0 18px #ffcc80, 0 0 25px #fff3e0; 
+            box-shadow: 0 0 8px rgba(255, 167, 38, 0.5); transform: scale(1.02);
+            animation: pulseGlowYellowImproved 2s infinite alternate ease-in-out;
+        }
+        @keyframes pulseGlowYellowImproved {
+            from { text-shadow: 0 0 10px #ffb74d, 0 0 15px #ffb74d, 0 0 22px #fff3e0; box-shadow: 0 0 6px rgba(255, 167, 38, 0.4); }
+            to { text-shadow: 0 0 18px #ffcc80, 0 0 25px #ffcc80, 0 0 35px #fff3e0; box-shadow: 0 0 12px rgba(255, 167, 38, 0.7); }
+        }
+        .letter-box.gray { background-color: rgba(207, 197, 187, 0.3); border-color: #a1887f; color: #8d6e63; opacity: 0.65; }
+        .letter-box.empty { border-color: #d7ccc8; }
+
+        .guess-row {
+            opacity: 1; transform: translateY(0); 
+            transition: opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            margin-bottom: 8px; animation: slideInFromTop 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+        @keyframes slideInFromTop { from { opacity: 0; transform: translateY(-40px); } to { opacity: 1; transform: translateY(0); } }
+        .guess-row.fading-out { opacity: 0.35; transform: translateY(20px) scale(0.96); }
+
+        .modal {
+            background-color: rgba(239, 225, 200, 0.98); border: 2px solid #8d6e63; 
+            box-shadow: 0 0 30px rgba(106, 76, 58, 0.6); border-radius: 0.4rem; color: #4e342e;
+        }
+        .screen-title {
+            font-size: 2.5rem; color: #5d4037; 
+            text-shadow: 1px 1px 0px #fff3e0, 2px 2px 0px rgba(0,0,0,0.1);
+            letter-spacing: 0.5px; margin-bottom: 1.5rem;
+        }
+        .app-container-bg {
+            background-color: rgba(245, 238, 225, 0.9); backdrop-filter: blur(5px);
+            border: 1px solid rgba(161, 136, 127, 0.6); 
+            box-shadow: 0 8px 30px rgba(0,0,0,0.25); padding: 1.5rem; 
+            border-radius: 0.5rem; width: 100%; margin: 1rem auto;
+        }
+        #guess-grid-container {
+            max-height: calc(60px * 5 + 8px * 4 + 10px); overflow-y: auto; padding: 5px; 
+            display: flex; flex-direction: column; /* Newest at top, older scroll down */
+            border: 1px dashed rgba(161, 136, 127, 0.4); border-radius: 0.25rem;
+            background-color: rgba(245, 233, 211, 0.1);
+        }
+        #guess-grid-container::-webkit-scrollbar { width: 10px; }
+        #guess-grid-container::-webkit-scrollbar-track { background: rgba(210, 180, 140, 0.2); border-radius: 5px; }
+        #guess-grid-container::-webkit-scrollbar-thumb { background: #a1887f; border-radius: 5px; border: 2px solid rgba(245, 238, 225, 0.85); }
+        #guess-grid-container::-webkit-scrollbar-thumb:hover { background: #8d6e63; }
+
+        .input-group { margin-bottom: 1.25rem; }
+        .input-label { display: block; margin-bottom: 0.625rem; font-size: 0.95rem; font-weight: 500; color: #8c6d62;}
+        
+        /* Switch Button Styles */
+        .mode-switch-container { display: flex; justify-content: center; margin-bottom: 1.5rem; }
+        .mode-switch {
+            display: flex; border: 1px solid #a1887f; border-radius: 0.5rem; overflow: hidden;
+            background-color: rgba(224, 206, 177, 0.5);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+        }
+        .mode-switch button {
+            padding: 0.75rem 1.25rem; background-color: transparent; border: none;
+            cursor: pointer; font-size: 1rem; color: #6a4c3a;
+            transition: background-color 0.3s, color 0.3s;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .mode-switch button.active {
+            background-color: #795548; color: #f5e9d3;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+        }
+        .mode-switch button:not(.active):hover { background-color: rgba(200, 180, 160, 0.5); }
+        .mode-switch svg { width: 1.2em; height: 1.2em; fill: currentColor; }
+
+        /* Infinite attempts checkbox */
+        .checkbox-group { display: flex; align-items: center; margin-top: 0.5rem; margin-bottom: 1rem;}
+        .checkbox-group input[type="checkbox"] {
+            appearance: none; width: 1.25em; height: 1.25em; border: 1.5px solid #a1887f;
+            border-radius: 0.2rem; margin-left: 0.5rem; cursor: pointer;
+            position: relative; background-color: rgba(224, 206, 177, 0.7);
+        }
+        .checkbox-group input[type="checkbox"]:checked { background-color: #795548; border-color: #5d4037;}
+        .checkbox-group input[type="checkbox"]:checked::before {
+            content: '✓'; font-size: 0.9em; color: #f5e9d3;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-weight: bold;
+        }
+        .checkbox-group label { font-size: 0.9rem; color: #8c6d62; cursor: pointer; }
+
+        .lang-en-input { direction: ltr; text-align: left; }
+        .lang-ar-input { direction: rtl; text-align: right; }
+        #loading-message { text-align: center; color: #795548; margin-top: 1rem; font-style: italic;}
+
+    </style>
+</head>
+<body class="p-2 md:p-4">
+
+    <div id="app-container" class="w-full max-w-xl mx-auto app-container-bg">
+
+        <div id="setup-screen" class="p-4 md:p-6">
+            <h1 class="screen-title font-bold text-center">إعداد مخطوطة الألغاز</h1>
+
+            <div class="mode-switch-container">
+                <div class="mode-switch">
+                    <button id="organizer-mode-btn" class="active" title="طور المنظم (خطي)">
+                        <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+                        خطي
+                    </button>
+                    <button id="robot-mode-btn" title="طور الروبوت (عشوائي)">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v2h-2zm0 4h2v6h-2zm-4-3.5c.83 0 1.5-.67 1.5-1.5S7.83 6.5 7 6.5s-1.5.67-1.5 1.5.67 1.5 1.5 1.5zm8 0c.83 0 1.5-.67 1.5-1.5s-.67-1.5-1.5-1.5-1.5.67-1.5 1.5.67 1.5 1.5 1.5z"/></svg>
+                        روبوت
+                    </button>
+                </div>
+            </div>
+            
+            <div id="organizer-settings">
+                <div class="input-group">
+                    <label for="manual-secret-word-lang" class="input-label">لغة الكلمة السرية:</label>
+                    <select id="manual-secret-word-lang" class="scroll-select">
+                        <option value="ar">العربية</option>
+                        <option value="en">الإنجليزية</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="manual-secret-word" class="input-label">الكلمة السرية:</label>
+                    <input type="text" id="manual-secret-word" class="scroll-input lang-ar-input" placeholder="مثال: أسطورة">
+                </div>
+                <div class="input-group">
+                    <label for="manual-attempts" class="input-label">عدد محاولات الكشف:</label>
+                    <input type="number" id="manual-attempts" value="10" min="1" max="25" class="scroll-input">
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="infinite-attempts-checkbox">
+                    <label for="infinite-attempts-checkbox">محاولات لا نهائية</label>
+                </div>
+                <button id="start-manual-game" class="scroll-button">ابدأ اللغز اليدوي</button>
+            </div>
+
+            <div id="robot-settings" class="hidden">
+                 <div class="input-group">
+                    <label for="random-lang-filter" class="input-label">اختر لغة الكلمة العشوائية:</label>
+                    <select id="random-lang-filter" class="scroll-select">
+                        <option value="any">أي لغة</option>
+                        <option value="ar">العربية فقط</option>
+                        <option value="en">الإنجليزية فقط</option>
+                    </select>
+                </div>
+                <p id="loading-message" class="text-sm text-amber-700 text-center mb-4 hidden">جاري تحميل قائمة الكلمات...</p>
+                <button id="start-random-game" class="scroll-button" disabled>ابدأ التحدي العشوائي</button>
+            </div>
+        </div>
+
+        <div id="game-screen" class="hidden space-y-6 p-4 md:p-6">
+            <h1 id="game-screen-title" class="screen-title font-bold text-center">اكتشف رموز المخطوطة!</h1>
+            <div id="game-info" class="text-center space-y-2.5">
+                <p id="word-length-info" class="text-orange-800 text-xl"></p>
+                <p id="attempts-info" class="text-red-800 text-xl"></p>
+                <p id="current-word-lang-info" class="text-sm text-amber-700"></p>
+            </div>
+            <div id="guess-grid-container">
+                <div id="guess-grid" class="space-y-2"></div>
+            </div>
+            <div class="mt-6 space-y-4">
+                <input type="text" id="guess-input" class="scroll-input text-lg text-center uppercase" placeholder="اكتب تخمينك هنا">
+                <button id="submit-guess" class="scroll-button">اكشف الرمز</button>
+            </div>
+            <div id="message-area" class="text-center text-amber-900 min-h-[2.2em] text-lg font-semibold"></div>
+        </div>
+
+        <div id="modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center p-4 z-50">
+            <div class="modal p-8 rounded-md shadow-xl text-center space-y-6 w-full max-w-lg">
+                <h2 id="modal-title" class="text-3xl font-bold text-amber-950"></h2>
+                <p id="modal-message" class="text-xl"></p>
+                <p id="modal-correct-word" class="text-2xl font-bold text-green-800"></p>
+                <button id="play-again" class="scroll-button">مخطوطة أخرى</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const setupScreen = document.getElementById('setup-screen');
+        const gameScreen = document.getElementById('game-screen');
+        
+        const organizerModeBtn = document.getElementById('organizer-mode-btn');
+        const robotModeBtn = document.getElementById('robot-mode-btn');
+        const organizerSettings = document.getElementById('organizer-settings');
+        const robotSettings = document.getElementById('robot-settings');
+
+        const manualSecretWordLangSelect = document.getElementById('manual-secret-word-lang');
+        const manualSecretWordInput = document.getElementById('manual-secret-word');
+        const manualAttemptsInput = document.getElementById('manual-attempts');
+        const infiniteAttemptsCheckbox = document.getElementById('infinite-attempts-checkbox');
+        const startManualGameButton = document.getElementById('start-manual-game');
+
+        const randomLangFilterSelect = document.getElementById('random-lang-filter');
+        const startRandomGameButton = document.getElementById('start-random-game');
+        const loadingMessage = document.getElementById('loading-message');
+        
+        const gameScreenTitle = document.getElementById('game-screen-title');
+        const wordLengthInfo = document.getElementById('word-length-info');
+        const attemptsInfoDisplay = document.getElementById('attempts-info');
+        const currentWordLangInfo = document.getElementById('current-word-lang-info');
+        const guessGridContainer = document.getElementById('guess-grid-container');
+        const guessGrid = document.getElementById('guess-grid');
+        const guessInput = document.getElementById('guess-input');
+        const submitGuessButton = document.getElementById('submit-guess');
+        const messageArea = document.getElementById('message-area');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalCorrectWord = document.getElementById('modal-correct-word');
+        const playAgainButton = document.getElementById('play-again');
+
+        let secretWord = '', totalAttempts = 0, remainingAttempts = 0, gameActive = false, wordLength = 0, currentWordLang = 'ar';
+        let isInfiniteAttempts = false;
+        const MAX_VISIBLE_FULL_OPACITY_ROWS = 5; 
+        let wordList = []; // Will be populated from words.json
+
+        // --- Load Word List from JSON ---
+        async function loadWordList() {
+            try {
+                loadingMessage.classList.remove('hidden');
+                startRandomGameButton.disabled = true;
+                // Ensure the path to words.json is correct relative to your HTML file
+                // If words.json is in the same directory as the HTML file:
+                const response = await fetch('words.json'); 
+                // If words.json is in a subdirectory, e.g., 'data/words.json':
+                // const response = await fetch('data/words.json');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}, failed to fetch words.json`);
+                }
+                wordList = await response.json();
+                if (!Array.isArray(wordList)) { // Basic validation
+                    throw new Error("words.json is not a valid JSON array.");
+                }
+                console.log("Word list loaded successfully:", wordList.length, "words");
+                startRandomGameButton.disabled = false; 
+                loadingMessage.classList.add('hidden');
+            } catch (error) {
+                console.error("Could not load or parse word list:", error);
+                loadingMessage.textContent = "خطأ في تحميل قائمة الكلمات. الوضع العشوائي قد لا يعمل.";
+                // Keep button disabled or provide alternative
+                startRandomGameButton.disabled = true; 
+            }
+        }
+
+
+        // Event Listeners for Mode Switch
+        organizerModeBtn.addEventListener('click', () => switchMode('organizer'));
+        robotModeBtn.addEventListener('click', () => switchMode('robot'));
+
+        manualSecretWordLangSelect.addEventListener('change', updateManualSecretWordInputDirection);
+        infiniteAttemptsCheckbox.addEventListener('change', toggleManualAttemptsInput);
+
+        startManualGameButton.addEventListener('click', () => initGame('manual'));
+        startRandomGameButton.addEventListener('click', () => initGame('random'));
+        submitGuessButton.addEventListener('click', handleGuess);
+        guessInput.addEventListener('keypress', (e) => { if (e.key === 'Enter' && gameActive) handleGuess(); });
+        playAgainButton.addEventListener('click', resetGame);
+
+        function switchMode(mode) {
+            if (mode === 'organizer') {
+                organizerModeBtn.classList.add('active');
+                robotModeBtn.classList.remove('active');
+                organizerSettings.classList.remove('hidden');
+                robotSettings.classList.add('hidden');
+                updateManualSecretWordInputDirection(); 
+                manualSecretWordInput.focus();
+            } else { // robot
+                robotModeBtn.classList.add('active');
+                organizerModeBtn.classList.remove('active');
+                robotSettings.classList.remove('hidden');
+                organizerSettings.classList.add('hidden');
+                if (wordList.length === 0 && !loadingMessage.classList.contains('hidden') ) { 
+                    // If list not loaded and no loading attempt in progress, try loading
+                    // This check prevents multiple load attempts if user clicks fast
+                    // The loading message visibility acts as a simple flag for ongoing load attempt
+                } else if (wordList.length > 0) {
+                     startRandomGameButton.disabled = false;
+                }
+                 // If wordList is empty but loadingMessage is hidden, it means loading failed previously.
+                 // The button remains disabled in that case.
+            }
+        }
+
+        function toggleManualAttemptsInput() {
+            isInfiniteAttempts = infiniteAttemptsCheckbox.checked;
+            manualAttemptsInput.disabled = isInfiniteAttempts;
+            if (isInfiniteAttempts) manualAttemptsInput.value = ''; 
+            else manualAttemptsInput.value = '10'; 
+        }
+        
+        function updateManualSecretWordInputDirection() {
+            const lang = manualSecretWordLangSelect.value;
+            manualSecretWordInput.className = 'scroll-input w-full'; 
+            if (lang === 'en') {
+                manualSecretWordInput.classList.add('lang-en-input');
+                manualSecretWordInput.placeholder = "Example: Legend";
+            } else { 
+                manualSecretWordInput.classList.add('lang-ar-input');
+                manualSecretWordInput.placeholder = "مثال: أسطورة";
+            }
+            manualSecretWordInput.value = ''; 
+        }
+
+        function initGame(mode) {
+            let word = '';
+            let attempts = 0;
+            isInfiniteAttempts = false; 
+
+            if (mode === 'manual') {
+                word = manualSecretWordInput.value.trim().toLowerCase();
+                currentWordLang = manualSecretWordLangSelect.value;
+                isInfiniteAttempts = infiniteAttemptsCheckbox.checked;
+
+                if (!isInfiniteAttempts) {
+                    attempts = parseInt(manualAttemptsInput.value);
+                    if (isNaN(attempts) || attempts < 1) {
+                        showMessage("طور المنظم: الرجاء تحديد عدد محاولات صحيح أو اختر 'لا نهائية'.", true); return;
+                    }
+                } else {
+                    attempts = Infinity; 
+                }
+
+                if (!word) {
+                    showMessage(`طور المنظم: الرجاء نقش كلمة سرية (${currentWordLang === 'ar' ? 'عربية' : 'إنجليزية'}).`, true); return;
+                }
+                const langPattern = currentWordLang === 'ar' ? /^[أ-يآؤئءةى]+$/ : /^[a-zA-Z]+$/;
+                if (!langPattern.test(word)) {
+                    showMessage(`طور المنظم: الكلمة يجب أن تحتوي على حروف ${currentWordLang === 'ar' ? 'عربية' : 'إنجليزية'} فقط.`, true); return;
+                }
+            } else { // Random mode
+                if (wordList.length === 0) {
+                    showMessage("قائمة الكلمات العشوائية لم تحمل أو فارغة. تأكد من وجود ملف 'words.json' صحيح.", true);
+                    return;
+                }
+                const langFilter = randomLangFilterSelect.value;
+                let filteredList = wordList;
+                if (langFilter !== 'any') {
+                    filteredList = wordList.filter(item => item.lang === langFilter);
+                }
+                if (filteredList.length === 0) {
+                    showMessage("التحدي العشوائي: لا توجد كلمات متاحة بالفلتر المحدد.", true); return;
+                }
+                const randomIndex = Math.floor(Math.random() * filteredList.length);
+                const randomEntry = filteredList[randomIndex];
+                word = randomEntry.word.toLowerCase();
+                attempts = randomEntry.attempts;
+                currentWordLang = randomEntry.lang;
+            }
+
+            secretWord = word;
+            wordLength = secretWord.length;
+            totalAttempts = attempts; 
+            remainingAttempts = totalAttempts;
+            gameActive = true;
+
+            setupScreen.classList.add('hidden');
+            gameScreen.classList.remove('hidden');
+            
+            gameScreenTitle.textContent = `اكتشف رموز المخطوطة (${currentWordLang === 'ar' ? 'عربي' : 'إنجليزي'})!`;
+            wordLengthInfo.textContent = `الكلمة السرية تحوي ${wordLength} أحرف.`;
+            currentWordLangInfo.textContent = `لغة الكلمة الحالية: ${currentWordLang === 'ar' ? 'العربية' : 'الإنجليزية'}`;
+            updateAttemptsDisplay();
+            
+            guessInput.className = 'scroll-input text-lg text-center uppercase w-full'; 
+            if (currentWordLang === 'en') guessInput.classList.add('lang-en-input');
+            else guessInput.classList.add('lang-ar-input');
+
+            guessGrid.innerHTML = ''; 
+            guessInput.maxLength = wordLength;
+            guessInput.value = '';
+            guessInput.focus();
+            messageArea.textContent = '';
+        }
+
+        function handleGuess() {
+            if (!gameActive || (!isInfiniteAttempts && remainingAttempts <= 0)) return;
+            const guess = guessInput.value.trim().toLowerCase(); 
+            if (guess.length !== wordLength) {
+                showMessage(`التخمين يجب أن يكون ${wordLength} أحرف.`, true); return;
+            }
+            const langPattern = currentWordLang === 'ar' ? /^[أ-يآؤئءةى]+$/ : /^[a-zA-Z]+$/;
+            if (!langPattern.test(guess)) {
+                 showMessage(`التخمين يجب أن يحتوي على حروف ${currentWordLang === 'ar' ? 'عربية' : 'إنجليزية'} فقط.`, true); return;
+            }
+
+            if (!isInfiniteAttempts) remainingAttempts--;
+            updateAttemptsDisplay();
+            const newRow = createGuessRow(guess);
+            guessGrid.insertBefore(newRow, guessGrid.firstChild);
+            guessGridContainer.scrollTop = 0; 
+
+            const rows = Array.from(guessGrid.children);
+            rows.forEach((row, index) => {
+                if (index >= MAX_VISIBLE_FULL_OPACITY_ROWS) row.classList.add('fading-out');
+                else row.classList.remove('fading-out');
+            });
+            
+            let maxLetterAnimationTime = wordLength * 120 + 700; 
+            if (guess === secretWord) {
+                gameActive = false;
+                setTimeout(() => showModal(true, "📜 تم فك رموز المخطوطة بنجاح! 📜"), maxLetterAnimationTime);
+                return;
+            }
+            if (!isInfiniteAttempts && remainingAttempts <= 0) {
+                gameActive = false;
+                setTimeout(() => showModal(false, "انتهت محاولات الكشف!"), maxLetterAnimationTime);
+                return;
+            }
+            guessInput.value = '';
+            guessInput.focus();
+        }
+
+        function createGuessRow(guess) { 
+            const row = document.createElement('div');
+            row.classList.add('flex', 'justify-center', 'guess-row');
+            const evaluation = evaluateGuess(guess, secretWord);
+            evaluation.forEach((evalItem, index) => {
+                const cell = document.createElement('div');
+                cell.classList.add('letter-box');
+                if (currentWordLang === 'en') cell.classList.add('lang-en');
+                setTimeout(() => {
+                    cell.textContent = evalItem.letter.toUpperCase();
+                    cell.classList.add(evalItem.color); 
+                }, index * 120); 
+                row.appendChild(cell);
+            });
+            return row;
+        }
+        
+        function evaluateGuess(guess, secret) { 
+            const result = []; const secretChars = secret.split(''); const guessChars = guess.split('');
+            const tempSecretCounts = {};
+            for (let i = 0; i < secret.length; i++) {
+                result[i] = { letter: guessChars[i], color: 'gray' };
+                tempSecretCounts[secretChars[i]] = (tempSecretCounts[secretChars[i]] || 0) + 1;
+            }
+            for (let i = 0; i < secret.length; i++) {
+                if (guessChars[i] === secretChars[i]) {
+                    result[i].color = 'green'; tempSecretCounts[guessChars[i]]--;
+                }
+            }
+            for (let i = 0; i < secret.length; i++) {
+                if (result[i].color !== 'green') { 
+                    if (secretChars.includes(guessChars[i]) && tempSecretCounts[guessChars[i]] > 0) {
+                        result[i].color = 'yellow'; tempSecretCounts[guessChars[i]]--;
+                    }
+                }
+            }
+            return result;
+        }
+
+        function updateAttemptsDisplay() {
+            if (isInfiniteAttempts) attemptsInfoDisplay.textContent = `المحاولات: ∞ (لا نهائية)`;
+            else attemptsInfoDisplay.textContent = `المحاولات المتبقية: ${remainingAttempts}`;
+        }
+
+        function showMessage(msg, isError = false) { 
+            messageArea.textContent = msg;
+            messageArea.className = 'text-center min-h-[2.2em] text-lg font-semibold'; 
+            if (isError) messageArea.classList.add('text-red-700');
+            else messageArea.classList.add('text-amber-900');
+        }
+
+        function showModal(isWin, titleMsg) { 
+            modal.classList.remove('hidden'); modalTitle.textContent = titleMsg;
+            if (isWin) {
+                modalMessage.textContent = `لقد نجحت في كشف أسرار الكلمة: "${secretWord.toUpperCase()}"!`;
+                modalCorrectWord.textContent = ""; 
+            } else {
+                modalMessage.textContent = "للأسف، لم تكشف الكلمة هذه المرة. حاول مع مخطوطة أخرى!";
+                modalCorrectWord.textContent = `الكلمة الصحيحة كانت: ${secretWord.toUpperCase()}`;
+            }
+            guessInput.disabled = true; submitGuessButton.disabled = true;
+        }
+
+        function resetGame() { 
+            modal.classList.add('hidden');
+            gameScreen.classList.add('hidden');
+            setupScreen.classList.remove('hidden');
+            
+            switchMode('organizer'); 
+            manualSecretWordInput.value = '';
+            manualAttemptsInput.value = '10';
+            manualAttemptsInput.disabled = false;
+            infiniteAttemptsCheckbox.checked = false;
+            isInfiniteAttempts = false;
+            manualSecretWordLangSelect.value = 'ar';
+            randomLangFilterSelect.value = 'any';
+            updateManualSecretWordInputDirection();
+
+            manualSecretWordInput.focus(); 
+            guessGrid.innerHTML = ''; 
+            gameActive = false;
+            guessInput.disabled = false;
+            submitGuessButton.disabled = false;
+        }
+
+        // Initial setup
+        document.addEventListener('DOMContentLoaded', () => {
+            switchMode('organizer'); 
+            updateManualSecretWordInputDirection(); 
+            manualSecretWordInput.focus();
+            loadWordList(); // Attempt to load word list on page load for random mode
+        });
+    </script>
+</body>
+</html>
+
 
