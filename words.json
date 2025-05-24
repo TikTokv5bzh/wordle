@@ -1,0 +1,2002 @@
+[
+  {
+    "word": "قمر",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "القراءة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "كتاب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "طبيب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "النجاح",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "ماء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الذكاء",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "أرض",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "معلوماتية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "التراث",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "التعليم",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "بيت",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "شمس",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الابداع",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "عين",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "طائرة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الاحتمالات",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "مدينة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "شاحنة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "هواء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "التكنولوجيا",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "اللغة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الاقتصاد",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الثقافة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الاستقلال",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "نار",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "العدالة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الحقيقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "يد",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "حديقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الحرية",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "استراتيجية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "قلم",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "المعرفة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "البرمجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المستقبل",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "دراجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "هاتف",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "مدرسة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "حاسوب",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "يد",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "دراجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الحرية",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "أرض",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "العدالة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "هاتف",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "هواء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "مدينة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "البرمجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "استراتيجية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الاستقلال",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "حديقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "التراث",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "مدرسة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "القراءة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الحقيقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "التعليم",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الابداع",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "معلوماتية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الاقتصاد",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "طبيب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "كتاب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "النجاح",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "بيت",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "شاحنة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "شمس",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الاحتمالات",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "عين",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "اللغة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الذكاء",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "ماء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "قلم",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "حاسوب",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المعرفة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "قمر",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "التكنولوجيا",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الثقافة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "طائرة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المستقبل",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "نار",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "مدينة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "هاتف",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "حديقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "النجاح",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "قمر",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "كتاب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "حاسوب",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "عين",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الابداع",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المستقبل",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "شمس",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "المعرفة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الاقتصاد",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "معلوماتية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "التراث",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "مدرسة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "قلم",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الحرية",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "القراءة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "نار",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "استراتيجية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "شاحنة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "طائرة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الذكاء",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "طبيب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "ماء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "التعليم",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "التكنولوجيا",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الاستقلال",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الثقافة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "البرمجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الحقيقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "يد",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "دراجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "بيت",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "هواء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "العدالة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "أرض",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الاحتمالات",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "اللغة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "هواء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "التكنولوجيا",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "ماء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الاحتمالات",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "البرمجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "يد",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "القراءة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "النجاح",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "اللغة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "طائرة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المعرفة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "عين",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "بيت",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "العدالة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الابداع",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الثقافة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "طبيب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "نار",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الاقتصاد",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "قمر",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الاستقلال",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "قلم",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "هاتف",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "استراتيجية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "شمس",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "مدينة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الحقيقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "كتاب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "أرض",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "التعليم",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المستقبل",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الذكاء",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "التراث",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "حديقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "حاسوب",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "مدرسة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الحرية",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "دراجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "شاحنة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "معلوماتية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الابداع",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "معلوماتية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "الثقافة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الاقتصاد",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "مدرسة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "العدالة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المعرفة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "حاسوب",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "يد",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "ماء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الحقيقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الذكاء",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "هاتف",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "البرمجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "استراتيجية",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "النجاح",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "قمر",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "هواء",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "حديقة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "بيت",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "عين",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الحرية",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "التعليم",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "شمس",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "القراءة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "الاحتمالات",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "التراث",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "اللغة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "شاحنة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "المستقبل",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "نار",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "طبيب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "دراجة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "أرض",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "مدينة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "طائرة",
+    "lang": "ar",
+    "attempts": 7
+  },
+  {
+    "word": "قلم",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "الاستقلال",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "كتاب",
+    "lang": "ar",
+    "attempts": 5
+  },
+  {
+    "word": "التكنولوجيا",
+    "lang": "ar",
+    "attempts": 9
+  },
+  {
+    "word": "independence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "laptop",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "language",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "cat",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "probability",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "knowledge",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "technology",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "heritage",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "sun",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "doctor",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "bicycle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "justice",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "development",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "home",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "success",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "tree",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "flower",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "reading",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "reality",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "air",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "economy",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "pen",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "school",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "book",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "bottle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "programming",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "intelligence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "car",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "education",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "eye",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "orange",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "creativity",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "culture",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "camera",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "strategy",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "teacher",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "freedom",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "dog",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "information",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "window",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "tree",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "cat",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "laptop",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "justice",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "success",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "heritage",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "technology",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "air",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "intelligence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "teacher",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "car",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "book",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "flower",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "language",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "knowledge",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "sun",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "dog",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "school",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "doctor",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "strategy",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "probability",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "window",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "home",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "pen",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "programming",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "independence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "education",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "information",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "culture",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "economy",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "freedom",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "orange",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "eye",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "camera",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "bottle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "reality",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "creativity",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "bicycle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "development",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "reading",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "air",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "creativity",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "heritage",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "sun",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "doctor",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "eye",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "strategy",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "justice",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "home",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "freedom",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "information",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "bottle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "culture",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "flower",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "reading",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "laptop",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "language",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "school",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "education",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "tree",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "cat",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "dog",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "intelligence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "car",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "knowledge",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "technology",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "book",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "bicycle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "window",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "programming",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "pen",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "orange",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "teacher",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "camera",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "success",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "reality",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "probability",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "economy",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "independence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "development",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "economy",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "flower",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "development",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "programming",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "bicycle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "school",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "book",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "education",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "language",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "success",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "eye",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "intelligence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "reality",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "orange",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "knowledge",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "strategy",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "dog",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "doctor",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "heritage",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "information",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "probability",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "window",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "car",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "tree",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "home",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "bottle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "sun",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "technology",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "teacher",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "reading",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "cat",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "creativity",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "camera",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "culture",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "laptop",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "air",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "independence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "justice",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "pen",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "freedom",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "education",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "tree",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "freedom",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "book",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "doctor",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "heritage",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "home",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "justice",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "strategy",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "probability",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "laptop",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "reality",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "dog",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "culture",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "creativity",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "car",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "school",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "orange",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "success",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "intelligence",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "bicycle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "bottle",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "flower",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "language",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "teacher",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "camera",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "knowledge",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "development",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "programming",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "technology",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "cat",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "eye",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "reading",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "window",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "air",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "sun",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "economy",
+    "lang": "en",
+    "attempts": 7
+  },
+  {
+    "word": "information",
+    "lang": "en",
+    "attempts": 9
+  },
+  {
+    "word": "pen",
+    "lang": "en",
+    "attempts": 5
+  },
+  {
+    "word": "independence",
+    "lang": "en",
+    "attempts": 9
+  }
+]
