@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ابحث على الكلمة - مغامرة كراس الرسم الملون</title>
+    <title>ابحث على الكلمة</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
@@ -14,10 +14,6 @@
                  url('AA-GALAXY.otf') format('opentype');
             font-weight: normal;
             font-style: normal;
-        }
-        @font-face {
-            font-family: 'Kalam'; 
-            src: url('https://fonts.gstatic.com/s/kalam/v16/YA9Qr0Wd4kDdMtA6GgLL.woff2') format('woff2');
         }
 
         :root {
@@ -34,14 +30,13 @@
             --font-main: 'AA-Galaxy', 'Kalam', cursive; 
             --font-en: 'Kalam', cursive; 
 
-            /* Rainbow Gradient Colors - will be set by JS */
-            --gradient-color-1: #FF0000; /* Red */
-            --gradient-color-2: #FFA500; /* Orange */
-            --gradient-color-3: #FFFF00; /* Yellow */
-            --gradient-color-4: #00FF00; /* Green */
-            --gradient-color-5: #0000FF; /* Blue */
-            --gradient-color-6: #4B0082; /* Indigo */
-            --gradient-color-7: #EE82EE; /* Violet */
+            --gradient-color-1: #FF0000; 
+            --gradient-color-2: #FFA500; 
+            --gradient-color-3: #FFFF00; 
+            --gradient-color-4: #00FF00; 
+            --gradient-color-5: #0000FF; 
+            --gradient-color-6: #4B0082; 
+            --gradient-color-7: #EE82EE; 
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&display=swap');
@@ -58,13 +53,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            /* Animated Rainbow Gradient Background */
             background: linear-gradient(-45deg, 
                 var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-3), 
                 var(--gradient-color-4), var(--gradient-color-5), var(--gradient-color-6), 
-                var(--gradient-color-7), var(--gradient-color-1) /* Loop back to red for smooth transition */
+                var(--gradient-color-7), var(--gradient-color-1) 
             );
-            background-size: 600% 600%; /* Increased size for more colors in view */
+            background-size: 600% 600%; 
             animation: gradientBG 30s ease infinite; 
         }
         @keyframes gradientBG {
@@ -134,7 +128,7 @@
             font-size: 2rem; margin: 4px; border-radius: 4px; 
             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
             text-transform: uppercase; 
-            background-color: rgba(255, 255, 255, 0.75); /* More opaque for readability on rainbow bg */
+            background-color: rgba(255, 255, 255, 0.75); 
             color: var(--sketch-text-dark); 
             position: relative;
             box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
@@ -190,7 +184,7 @@
             font-weight: 700;
         }
         .app-container-bg {
-            background-color: rgba(255, 250, 240, 0.98); /* Almost opaque for readability */
+            background-color: rgba(255, 250, 240, 0.98); 
             border: 3px solid var(--sketch-lines); 
             box-shadow: 5px 5px 0px rgba(0,0,0,0.1), 0 0 15px rgba(0,0,0,0.05); padding: 1.5rem; 
             border-radius: 0.75rem; width: 100%; margin: 1rem auto; max-width: 500px;
@@ -224,7 +218,7 @@
             max-height: calc(55px * 5 + 8px * 4 + 10px); overflow-y: auto; padding: 6px; 
             display: flex; flex-direction: column-reverse; 
             border: 1.5px dashed var(--sketch-lines); border-radius: 0.25rem;
-            background-color: rgba(255,255,255, 0.6); /* More opaque for readability */
+            background-color: rgba(255,255,255, 0.6); 
         }
         #guess-grid-container::-webkit-scrollbar { width: 8px; }
         #guess-grid-container::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
@@ -252,8 +246,9 @@
             color: #ffffff;
         }
         .switch button:not(.active):hover { background-color: rgba(0,0,0,0.05); }
-        .switch svg, .switch .flag-icon { width: 1.5em; height: 1.5em; fill: currentColor; }
-        .flag-icon { font-size: 1.5em; line-height: 1; }
+        .switch svg, .switch .flag-icon img { width: 1.8em; height: 1.2em; /* Adjusted for img flags */ object-fit: cover; border-radius: 2px;}
+        .switch .bi-robot { font-size: 1.5em; } /* For bootstrap icon */
+
 
         .checkbox-group { display: flex; align-items: center; margin-top: 0.5rem; margin-bottom: 0.5rem; }
         .checkbox-group input[type="checkbox"] {
@@ -326,8 +321,18 @@
                     <label class="input-label mb-3">اختر لغة كلمة اللغز:</label>
                     <div class="switch-container">
                         <div class="switch" id="robot-lang-switch">
-                            <button data-lang="ar" class="active" title="العربية"><span class="flag-icon">🇸🇦</span></button>
-                            <button data-lang="en" title="الإنجليزية"><span class="flag-icon">🇺🇸</span></button>
+                            <button data-lang="ar" class="active" title="العربية">
+                                <span class="flag-icon">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Saudi_Arabia.svg/80px-Flag_of_Saudi_Arabia.svg.png" alt="Saudi Arabia Flag" 
+                                         onerror="this.alt='🇸🇦'; this.style.fontSize='1.5em'; this.style.lineHeight='1'; this.parentNode.replaceChild(document.createTextNode(this.alt), this);" >
+                                </span>
+                            </button>
+                            <button data-lang="en" title="الإنجليزية">
+                                <span class="flag-icon">
+                                     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg/80px-Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg.png" alt="USA Flag"
+                                          onerror="this.alt='🇺🇸'; this.style.fontSize='1.5em'; this.style.lineHeight='1'; this.parentNode.replaceChild(document.createTextNode(this.alt), this);">
+                                </span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -408,29 +413,17 @@
         let wordList = []; 
 
         function setRainbowGradientBackground() {
-            // Rainbow colors
             const colors = [
-                '#FF0000', /* Red */
-                '#FFA500', /* Orange */
-                '#FFFF00', /* Yellow */
-                '#00FF00', /* Green */
-                '#0000FF', /* Blue */
-                '#4B0082', /* Indigo */
-                '#EE82EE'  /* Violet */
+                '#FF4E50', /* Coral Pink */ '#FC913A', /* Orange Peel */
+                '#F9D423', /* Sunflower Yellow */ '#EDE574', /* Pale Yellow */
+                '#E1F5C4', /* Light Green */ '#ADD8E6', /* Light Blue */
+                '#8A2BE2'  /* Blue Violet */
             ];
-
-            // Shuffle colors for more variety each time, or use a fixed order
-            // For a fixed rainbow order, you can use the colors array directly
-            // For random-ish, but still rainbow-like, you can pick a starting point
-            const startIndex = Math.floor(Math.random() * colors.length);
-            
-            document.documentElement.style.setProperty('--gradient-color-1', colors[startIndex % colors.length]);
-            document.documentElement.style.setProperty('--gradient-color-2', colors[(startIndex + 1) % colors.length]);
-            document.documentElement.style.setProperty('--gradient-color-3', colors[(startIndex + 2) % colors.length]);
-            document.documentElement.style.setProperty('--gradient-color-4', colors[(startIndex + 3) % colors.length]);
-            // You can add more CSS variables if your gradient in CSS uses more stops
+            let shuffledColors = colors.sort(() => 0.5 - Math.random());
+            for (let i = 1; i <= 7; i++) {
+                document.documentElement.style.setProperty(`--gradient-color-${i}`, shuffledColors[i-1]);
+            }
         }
-
 
         async function loadWordList() {
             try {
@@ -466,7 +459,6 @@
         }
         manualSecretWordInput.addEventListener('input', updateManualWordPreview);
 
-
         robotLangSwitch.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', () => {
                 robotLangSwitch.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
@@ -478,7 +470,6 @@
         robotModeBtn.addEventListener('click', () => switchMode('robot'));
         manualInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('manual'));
         robotInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('robot'));
-
         startManualGameButton.addEventListener('click', () => initGame('manual'));
         startRandomGameButton.addEventListener('click', () => initGame('random'));
         submitGuessButton.addEventListener('click', handleGuess);
@@ -571,7 +562,8 @@
                 const langFilter = getSelectedRobotLang(); 
                 let filteredList = wordList.filter(item => item.lang === langFilter);
                 if (filteredList.length === 0) { 
-                    showMessage(`لا توجد كلمات باللغة المحددة (${langFilter === 'ar' ? '🇸🇦' : '🇺🇸'}).`, true); return;
+                    const langName = langFilter === 'ar' ? 'العربية' : 'الإنجليزية';
+                    showMessage(`لا توجد كلمات باللغة المحددة (${langName}).`, true); return;
                 }
                 const randomIndex = Math.floor(Math.random() * filteredList.length);
                 const randomEntry = filteredList[randomIndex];
@@ -595,9 +587,12 @@
                 mainGameScreenTitleElement.textContent = "ابحث عن الكلمة!";
             }
             
-            const langDisplay = currentWordLang === 'ar' ? '🇸🇦' : '🇺�';
+            const langDisplayElementContainer = currentWordLang === 'ar' ? 
+                robotLangSwitch.querySelector('button[data-lang="ar"] span.flag-icon') : 
+                robotLangSwitch.querySelector('button[data-lang="en"] span.flag-icon');
+            
             wordLengthInfo.textContent = `الكلمة مكونة من ${wordLength} حروف.`;
-            currentWordLangInfo.textContent = `لغة الكلمة: ${langDisplay}`;
+            currentWordLangInfo.innerHTML = `لغة الكلمة: ${langDisplayElementContainer.innerHTML}`; 
             updateAttemptsDisplay(); 
             
             guessInput.className = 'sketch-input text-lg text-center uppercase w-full'; 
@@ -753,12 +748,12 @@
             guessInput.disabled = false;
             submitGuessButton.disabled = false;
             attemptsInfoDisplay.classList.remove('hidden'); 
-            setRainbowGradientBackground(); // Reset to new rainbow on new game
+            setRainbowGradientBackground(); 
         }
 
         // Initial setup
         document.addEventListener('DOMContentLoaded', () => {
-            setRainbowGradientBackground(); // Set rainbow gradient on load
+            setRainbowGradientBackground(); 
             switchMode('organizer'); 
             manualSecretWordInput.focus();
             updateManualWordPreview(); 
