@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة تخمين الكلمات - مجلس الألغاز التراثي</title>
+    <title>لعبة ابحث عن الكلمة - مجلس الألغاز التراثي</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @font-face {
@@ -207,7 +207,7 @@
     <div id="app-container" class="w-full max-w-lg mx-auto app-container-bg">
 
         <div id="setup-screen" class="p-4 md:p-6">
-            <h1 class="screen-title font-bold text-center">إعداد مجلس الألغاز</h1>
+            <h1 class="screen-title font-bold text-center">إعداد لعبة ابحث عن الكلمة</h1>
 
             <div class="switch-container">
                 <div class="switch">
@@ -256,7 +256,7 @@
         </div>
 
         <div id="game-screen" class="hidden space-y-6 p-4 md:p-6">
-            <h1 id="game-screen-title" class="screen-title font-bold text-center">اكتشف سر المجلس!</h1>
+            <h1 id="game-screen-title" class="screen-title font-bold text-center">ابحث عن الكلمة!</h1>
             <div id="game-info" class="text-center space-y-2.5">
                 <p id="word-length-info" class="text-xl" style="color: var(--text-medium);"></p>
                 <p id="attempts-info" class="text-xl" style="color: var(--accent-red);"></p>
@@ -446,7 +446,8 @@
             gameScreen.classList.remove('hidden');
             
             const langDisplay = currentWordLang === 'ar' ? '🇸🇦' : '🇺🇸';
-            gameScreenTitle.textContent = `اكتشف سر المجلس (${langDisplay})!`;
+            // Update game screen title to "ابحث عن الكلمة"
+            gameScreenTitle.textContent = `ابحث عن الكلمة (${langDisplay})!`;
             wordLengthInfo.textContent = `الكلمة السرية تحوي ${wordLength} أحرف.`;
             currentWordLangInfo.textContent = `لغة الكلمة الحالية: ${langDisplay}`;
             updateAttemptsDisplay();
