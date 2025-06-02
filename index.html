@@ -356,7 +356,7 @@
         #letter-input-area.rtl {
             flex-direction: row-reverse; 
         }
-       
+        
         /* Common style for both game and setup keyboards */
         .keyboard-area-common {
             margin-top: 0.5rem; 
@@ -429,7 +429,7 @@
             
             <div id="organizer-settings">
                 <div class="input-group">
-                    <label for="manual-secret-word" class="input-label">الكلمة السرية (عربي أو إنجليزي):</label>
+                    <label for="manual-secret-word" class="input-label">الكلمة السرية (عربي أو إنجليزي - بدون أرقام):</label>
                     <input type="password" id="manual-secret-word" class="sketch-input" placeholder="ارسم كلمتك (مخفية)">
                     <div id="manual-word-preview" class="letter-preview-container">
                     </div>
@@ -724,15 +724,20 @@
         function detectLanguage(text) {
             const arabicRegex = /[\u0600-\u06FF]/;
             const englishRegex = /[a-zA-Z]/;
+            const numberRegex = /[0-9]/; // Regex to detect numbers
+
+            if (numberRegex.test(text)) return 'mixed_with_number'; // If numbers are present, it's invalid for word game
+
             const hasArabic = arabicRegex.test(text);
             const hasEnglish = englishRegex.test(text);
 
             if (hasArabic && !hasEnglish) return 'ar';
             if (hasEnglish && !hasArabic) return 'en';
-            if (text.length > 0 && hasArabic) return 'ar'; 
-            if (text.length > 0 && hasEnglish) return 'en';
-            return text.length === 0 ? currentSetupKeyboardLang : 'mixed'; 
+            if (text.length > 0 && (hasArabic || hasEnglish)) return 'mixed'; // Mixed Arabic and English letters
+            
+            return text.length === 0 ? currentSetupKeyboardLang : 'unknown'; // Default or if only symbols
         }
+
 
         function initGame(mode) {
             setupMessageArea.textContent = ''; 
@@ -745,10 +750,10 @@
                 word = manualSecretWordInput.value.trim(); 
                 let detectedLang = detectLanguage(word);
                 
-                if (word === '' || (detectedLang === 'mixed' && word.length > 0)) { 
-                     showMessage("طور الرسام: كلمة غير صالحة. الرجاء إدخال كلمة بحروف عربية فقط أو إنجليزية فقط.", true, true); return;
+                if (word === '' || detectedLang === 'mixed' || detectedLang === 'mixed_with_number' || detectedLang === 'unknown') {  
+                     showMessage("طور الرسام: كلمة غير صالحة. الرجاء إدخال كلمة بحروف عربية فقط أو إنجليزية فقط، وبدون أرقام أو رموز.", true, true); return;
                 }
-                currentWordLang = detectedLang === 'mixed' ? 'ar' : detectedLang; 
+                currentWordLang = detectedLang; 
                 word = word.toLowerCase(); 
                 isVirtualKeyboardActive = true; 
 
@@ -909,7 +914,7 @@
                 if (index < wordLength - 1) letterDisplayElements[index + 1].focus();
                 else inputField.blur(); 
             } else if (value && !isValidChar) {
-                currentGuessArray[index] = ''; inputField.value = '';       
+                currentGuessArray[index] = ''; inputField.value = '';     
             } else if (!value) currentGuessArray[index] = '';
         }
 
@@ -1097,12 +1102,12 @@
 
         function handleSetupKeyboardLetter(char) {
             manualSecretWordInput.value += char;
-            manualSecretWordInput.dispatchEvent(new Event('input')); 
+            manualSecretWordInput.dispatchEvent(new Event('input', { bubbles: true })); 
         }
 
         function handleSetupKeyboardBackspace() {
             manualSecretWordInput.value = manualSecretWordInput.value.slice(0, -1);
-            manualSecretWordInput.dispatchEvent(new Event('input')); 
+            manualSecretWordInput.dispatchEvent(new Event('input', { bubbles: true })); 
         }
 
         function updateKeyboardKeyColors() { 
@@ -1157,28 +1162,35 @@
         submitGuessButton.addEventListener('click', handleGuess);
         playAgainButton.addEventListener('click', resetGame);
         
-        manualSecretWordInput.addEventListener('input', () => {
+        manualSecretWordInput.addEventListener('input', (event) => {
+            // Filter out numbers
+            const filteredValue = event.target.value.replace(/[0-9]/g, '');
+            if (event.target.value !== filteredValue) {
+                event.target.value = filteredValue;
+                // Optionally show a message that numbers are not allowed
+                showMessage("الأرقام غير مسموح بها في الكلمة السرية.", true, true);
+                setTimeout(() => showMessage("", false, true), 2000); // Clear message after 2s
+            }
+
             updateManualWordPreview();
             if (toggleSetupKeyboardCheckbox.checked) {
                 const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
-                if (lang !== 'mixed' && lang !== currentSetupKeyboardLang) { 
+                if (lang !== 'mixed' && lang !== 'mixed_with_number' && lang !== currentSetupKeyboardLang) { 
                     renderSetupKeyboard(lang);
-                } else if (setupKeyboardArea.innerHTML === '') { 
-                     renderSetupKeyboard(lang === 'mixed' ? currentSetupKeyboardLang : lang);
+                } else if (setupKeyboardArea.innerHTML === '' || (lang === 'mixed_with_number' && currentSetupKeyboardLang !== 'ar')) { 
+                     renderSetupKeyboard(currentSetupKeyboardLang); // Default to current if mixed or invalid
                 }
             }
         });
+
         manualSecretWordInput.addEventListener('focus', () => {
-            // If setup keyboard is enabled, ensure it's rendered.
-            // Also, set readOnly based on the checkbox.
             manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
             if (toggleSetupKeyboardCheckbox.checked && setupKeyboardArea.innerHTML === '') {
                  const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
-                 renderSetupKeyboard(lang === 'mixed' ? currentSetupKeyboardLang : lang);
+                 renderSetupKeyboard(lang === 'mixed' || lang === 'mixed_with_number' ? currentSetupKeyboardLang : lang);
             }
         });
          manualSecretWordInput.addEventListener('blur', () => {
-            // Optional: if you want to keep it readonly even on blur if kbd is active
             // manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
         });
 
@@ -1193,15 +1205,12 @@
         toggleSetupKeyboardCheckbox.addEventListener('change', () => {
             const isChecked = toggleSetupKeyboardCheckbox.checked;
             setupKeyboardArea.classList.toggle('hidden', !isChecked);
-            manualSecretWordInput.readOnly = isChecked; // Set readonly based on checkbox
+            manualSecretWordInput.readOnly = isChecked; 
             if (isChecked) {
                 const lang = detectLanguage(manualSecretWordInput.value) || 'ar'; 
-                renderSetupKeyboard(lang === 'mixed' ? 'ar' : lang); 
-                if(!manualSecretWordInput.readOnly) { // If it became writable, focus it
-                     // manualSecretWordInput.focus(); // Focus might be annoying if user is clicking checkbox
-                }
+                renderSetupKeyboard(lang === 'mixed' || lang === 'mixed_with_number' ? 'ar' : lang); 
             } else {
-                 manualSecretWordInput.focus(); // If kbd hidden, make sure input is focusable
+                 manualSecretWordInput.focus(); 
             }
         });
 
