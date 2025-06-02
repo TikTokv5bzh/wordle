@@ -407,6 +407,24 @@
         .key.key-yellow { background-color: var(--feedback-yellow) !important; color: var(--text-dark) !important; border-color: #b8860b !important; }
         .key.key-gray { background-color: var(--feedback-key-gray) !important; color: white !important; opacity: 0.85 !important; border-color: #6e5c4a !important; }
 
+        /* Style for the setup keyboard language toggle */
+        #setup-keyboard-lang-toggle-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 0.5rem; /* Space above the toggle */
+            margin-bottom: 0.25rem; /* Space below the toggle, before keyboard rows */
+        }
+        #setup-keyboard-lang-toggle-container .switch button {
+             font-size: 0.8rem; /* Smaller font for this specific toggle */
+             padding: 0.3rem 0.6rem;
+        }
+         #setup-keyboard-lang-toggle-container .switch .flag-icon img,
+         #setup-keyboard-lang-toggle-container .switch .flag-icon span {
+            width: 1.2em;
+            height: 0.8em;
+         }
+
+
     </style>
 </head>
 <body class="p-1 md:p-2"> 
@@ -439,8 +457,7 @@
                     <label for="toggle-setup-keyboard-checkbox">إظهار لوحة مفاتيح لإدخال الكلمة السرية</label>
                 </div>
                 <div id="setup-keyboard-area" class="hidden keyboard-area-common">
-                    <!-- Setup keyboard will be rendered here -->
-                </div>
+                    </div>
 
                 <div class="input-group mt-3"> 
                     <label for="manual-attempts" class="input-label">عدد المحاولات:</label>
@@ -498,8 +515,7 @@
             
             <div id="letter-input-area-container" class="my-1.5">
                 <div id="letter-input-area">
-                    <!-- Letter input boxes will be generated here by JS -->
-                </div>
+                    </div>
             </div>
 
             <div class="checkbox-group justify-center my-3">
@@ -510,8 +526,7 @@
             <button id="submit-guess" class="sketch-button">أرسل تخمينك</button>
             
             <div id="keyboard-area" class="keyboard-area-common">
-                <!-- Virtual keyboard will be generated here by JS -->
-            </div>
+                </div>
             <div id="message-area" class="text-center min-h-[1.8em] text-sm font-semibold"></div> 
         </div>
 
@@ -565,6 +580,7 @@
 
         const toggleSetupKeyboardCheckbox = document.getElementById('toggle-setup-keyboard-checkbox');
         const setupKeyboardArea = document.getElementById('setup-keyboard-area');
+        let setupKeyboardLangToggleContainer = null; // Will hold the language toggle for setup keyboard
 
         // Game State
         let secretWord = '', totalAttempts = 0, remainingAttempts = 0, gameActive = false, wordLength = 0, currentWordLang = 'ar';
@@ -574,7 +590,7 @@
         let currentGuessArray = []; 
         let letterStates = {}; 
         let isVirtualKeyboardActive = true; 
-        let currentSetupKeyboardLang = 'ar'; 
+        let currentSetupKeyboardLang = 'ar'; // Default language for setup keyboard
 
         const arabicPureKeys = [ 
             ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج', 'د'],
@@ -619,6 +635,8 @@
                 loadingMessage.classList.remove('hidden');
                 startRandomGameButton.disabled = true;
                 await new Promise(resolve => setTimeout(resolve, 500)); 
+                // In a real application, you would fetch this from a server or a local JSON file.
+                // For this example, the list is hardcoded.
                 wordList = [
                     {"lang": "ar", "word": "كتاب", "attempts": 6}, {"lang": "ar", "word": "قلم", "attempts": 5},
                     {"lang": "ar", "word": "مدرسة", "attempts": 7}, {"lang": "ar", "word": "شمس", "attempts": 5},
@@ -674,10 +692,11 @@
                 // Update setup keyboard based on current input and checkbox state
                 manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
                 if (toggleSetupKeyboardCheckbox.checked) {
-                    const lang = detectLanguage(manualSecretWordInput.value) || 'ar';
+                    const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
                     renderSetupKeyboard(lang);
                 } else {
                     setupKeyboardArea.classList.add('hidden');
+                     if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
                 }
             } else { 
                 robotModeBtn.classList.add('active');
@@ -685,6 +704,7 @@
                 robotSettings.classList.remove('hidden');
                 organizerSettings.classList.add('hidden');
                 setupKeyboardArea.classList.add('hidden'); 
+                if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
                 if (wordList.length === 0 && loadingMessage.classList.contains('hidden')) { 
                     loadWordList(); 
                 } else if (wordList.length > 0) {
@@ -724,18 +744,18 @@
         function detectLanguage(text) {
             const arabicRegex = /[\u0600-\u06FF]/;
             const englishRegex = /[a-zA-Z]/;
-            const numberRegex = /[0-9]/; // Regex to detect numbers
+            const numberRegex = /[0-9]/; 
 
-            if (numberRegex.test(text)) return 'mixed_with_number'; // If numbers are present, it's invalid for word game
+            if (numberRegex.test(text)) return 'mixed_with_number'; 
 
             const hasArabic = arabicRegex.test(text);
             const hasEnglish = englishRegex.test(text);
 
             if (hasArabic && !hasEnglish) return 'ar';
             if (hasEnglish && !hasArabic) return 'en';
-            if (text.length > 0 && (hasArabic || hasEnglish)) return 'mixed'; // Mixed Arabic and English letters
+            if (text.length > 0 && (hasArabic || hasEnglish)) return 'mixed'; 
             
-            return text.length === 0 ? currentSetupKeyboardLang : 'unknown'; // Default or if only symbols
+            return text.length === 0 ? currentSetupKeyboardLang : 'unknown'; 
         }
 
 
@@ -821,13 +841,16 @@
             
             switchMode('organizer'); 
             manualSecretWordInput.value = '';
-            manualSecretWordInput.readOnly = false; // Ensure it's writable on reset
+            manualSecretWordInput.readOnly = false; 
             updateManualWordPreview(); 
             manualAttemptsInput.value = '25'; 
             manualAttemptsInput.disabled = false;
             manualInfiniteAttemptsCheckbox.checked = false;
             toggleSetupKeyboardCheckbox.checked = false; 
             setupKeyboardArea.classList.add('hidden');
+            if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
+            currentSetupKeyboardLang = 'ar'; // Reset setup keyboard language
+
             manualInfiniteConfirm.textContent = ''; 
             
             robotInfiniteAttemptsCheckbox.checked = false;
@@ -1075,8 +1098,66 @@
             letterDisplayElements.forEach(input => input.readOnly = true); 
         }
 
+        function createSetupKeyboardLangToggle() {
+            if (setupKeyboardLangToggleContainer) {
+                setupKeyboardLangToggleContainer.innerHTML = ''; // Clear previous if any
+            } else {
+                setupKeyboardLangToggleContainer = document.createElement('div');
+                setupKeyboardLangToggleContainer.id = 'setup-keyboard-lang-toggle-container';
+                setupKeyboardLangToggleContainer.className = 'switch-container'; // Use existing class for centering
+            }
+            
+            const switchDiv = document.createElement('div');
+            switchDiv.className = 'switch';
+
+            const arButton = document.createElement('button');
+            arButton.dataset.lang = 'ar';
+            arButton.title = 'العربية';
+            arButton.innerHTML = `<span class="flag-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Flag_of_Saudi_Arabia.svg/80px-Flag_of_Saudi_Arabia.svg.png" alt="AR" onerror="this.alt='AR'; this.style.fontSize='0.9em'; this.parentNode.replaceChild(document.createTextNode(this.alt), this);"></span>`;
+            arButton.onclick = () => toggleSetupKeyboardLanguage('ar');
+
+            const enButton = document.createElement('button');
+            enButton.dataset.lang = 'en';
+            enButton.title = 'الإنجليزية';
+            enButton.innerHTML = `<span class="flag-icon"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg/80px-Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg.png" alt="EN" onerror="this.alt='EN'; this.style.fontSize='0.9em'; this.parentNode.replaceChild(document.createTextNode(this.alt), this);"></span>`;
+            enButton.onclick = () => toggleSetupKeyboardLanguage('en');
+
+            switchDiv.appendChild(arButton);
+            switchDiv.appendChild(enButton);
+            setupKeyboardLangToggleContainer.appendChild(switchDiv);
+            
+            return setupKeyboardLangToggleContainer;
+        }
+
+        function toggleSetupKeyboardLanguage(lang) {
+            currentSetupKeyboardLang = lang;
+            renderSetupKeyboard(currentSetupKeyboardLang);
+            // Optional: If you want to clear the input when language changes
+            // manualSecretWordInput.value = '';
+            // updateManualWordPreview();
+            manualSecretWordInput.focus();
+        }
+
+
         function renderSetupKeyboard(lang) {
-            setupKeyboardArea.innerHTML = '';
+            // Clear only keyboard rows, not the toggle
+            const existingRows = setupKeyboardArea.querySelectorAll('.keyboard-row');
+            existingRows.forEach(row => row.remove());
+
+            // Ensure lang toggle is present and at the top
+            if (!setupKeyboardLangToggleContainer || !setupKeyboardArea.contains(setupKeyboardLangToggleContainer)) {
+                setupKeyboardLangToggleContainer = createSetupKeyboardLangToggle();
+                setupKeyboardArea.prepend(setupKeyboardLangToggleContainer); // Prepend to keep it on top
+            }
+            setupKeyboardLangToggleContainer.classList.remove('hidden');
+
+
+            // Update active state of toggle buttons
+            const toggleButtons = setupKeyboardLangToggleContainer.querySelectorAll('.switch button');
+            toggleButtons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            
             currentSetupKeyboardLang = lang; 
             const keys = lang === 'ar' ? arabicPureKeys : englishPureKeys;
             keys.forEach(rowKeys => {
@@ -1096,18 +1177,21 @@
                     }
                     rowDiv.appendChild(keyButton);
                 });
-                setupKeyboardArea.appendChild(rowDiv);
+                setupKeyboardArea.appendChild(rowDiv); // Append rows after the toggle
             });
         }
+
 
         function handleSetupKeyboardLetter(char) {
             manualSecretWordInput.value += char;
             manualSecretWordInput.dispatchEvent(new Event('input', { bubbles: true })); 
+            manualSecretWordInput.focus();
         }
 
         function handleSetupKeyboardBackspace() {
             manualSecretWordInput.value = manualSecretWordInput.value.slice(0, -1);
             manualSecretWordInput.dispatchEvent(new Event('input', { bubbles: true })); 
+            manualSecretWordInput.focus();
         }
 
         function updateKeyboardKeyColors() { 
@@ -1153,6 +1237,7 @@
             });
         }
         
+        // Event Listeners
         organizerModeBtn.addEventListener('click', () => switchMode('organizer'));
         robotModeBtn.addEventListener('click', () => switchMode('robot'));
         manualInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('manual'));
@@ -1163,35 +1248,31 @@
         playAgainButton.addEventListener('click', resetGame);
         
         manualSecretWordInput.addEventListener('input', (event) => {
-            // Filter out numbers
-            const filteredValue = event.target.value.replace(/[0-9]/g, '');
-            if (event.target.value !== filteredValue) {
+            const originalValue = event.target.value;
+            const filteredValue = originalValue.replace(/[0-9]/g, '');
+            if (originalValue !== filteredValue) {
                 event.target.value = filteredValue;
-                // Optionally show a message that numbers are not allowed
                 showMessage("الأرقام غير مسموح بها في الكلمة السرية.", true, true);
-                setTimeout(() => showMessage("", false, true), 2000); // Clear message after 2s
+                setTimeout(() => showMessage("", false, true), 2000); 
             }
-
             updateManualWordPreview();
-            if (toggleSetupKeyboardCheckbox.checked) {
-                const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
-                if (lang !== 'mixed' && lang !== 'mixed_with_number' && lang !== currentSetupKeyboardLang) { 
-                    renderSetupKeyboard(lang);
-                } else if (setupKeyboardArea.innerHTML === '' || (lang === 'mixed_with_number' && currentSetupKeyboardLang !== 'ar')) { 
-                     renderSetupKeyboard(currentSetupKeyboardLang); // Default to current if mixed or invalid
-                }
-            }
+            // No automatic language switching for setup keyboard based on input here.
+            // Language is now controlled by the dedicated toggle.
         });
+
 
         manualSecretWordInput.addEventListener('focus', () => {
             manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
-            if (toggleSetupKeyboardCheckbox.checked && setupKeyboardArea.innerHTML === '') {
-                 const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
-                 renderSetupKeyboard(lang === 'mixed' || lang === 'mixed_with_number' ? currentSetupKeyboardLang : lang);
+            if (toggleSetupKeyboardCheckbox.checked && setupKeyboardArea.classList.contains('hidden')) {
+                 // This case should ideally not happen if checkbox is checked, keyboard should be visible.
+                 // But as a fallback, ensure it's rendered.
+                 renderSetupKeyboard(currentSetupKeyboardLang);
+                 setupKeyboardArea.classList.remove('hidden');
+                 if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
+            } else if (toggleSetupKeyboardCheckbox.checked && !setupKeyboardArea.classList.contains('hidden')) {
+                // If keyboard is already visible, ensure toggle is also visible
+                if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
             }
-        });
-         manualSecretWordInput.addEventListener('blur', () => {
-            // manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
         });
 
 
@@ -1207,10 +1288,18 @@
             setupKeyboardArea.classList.toggle('hidden', !isChecked);
             manualSecretWordInput.readOnly = isChecked; 
             if (isChecked) {
-                const lang = detectLanguage(manualSecretWordInput.value) || 'ar'; 
-                renderSetupKeyboard(lang === 'mixed' || lang === 'mixed_with_number' ? 'ar' : lang); 
+                // Determine initial language for setup keyboard.
+                // If input has content, try to detect. Otherwise, use currentSetupKeyboardLang (default 'ar').
+                const detectedLangForKeyboard = detectLanguage(manualSecretWordInput.value);
+                let langToRender = currentSetupKeyboardLang; // Default
+                if (detectLanguage !== 'mixed' && detectedLangForKeyboard !== 'mixed_with_number' && detectedLangForKeyboard !== 'unknown') {
+                    langToRender = detectedLangForKeyboard;
+                }
+                renderSetupKeyboard(langToRender); 
+                 if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
             } else {
                  manualSecretWordInput.focus(); 
+                 if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
             }
         });
 
@@ -1230,8 +1319,10 @@
             manualAttemptsInput.value = '25'; 
             toggleSetupKeyboardCheckbox.checked = false; 
             setupKeyboardArea.classList.add('hidden');
-            manualSecretWordInput.readOnly = false; // Initially not readonly
+            if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
+            manualSecretWordInput.readOnly = false; 
         });
     </script>
 </body>
 </html>
+
