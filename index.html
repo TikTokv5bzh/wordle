@@ -18,29 +18,22 @@
         }
 
         :root {
-            /* Vintage Paper / Sepia Sketch Theme (elements other than body) */
             --notebook-bg: #f5e9d3; 
             --notebook-lines: #d2b48c; 
             --text-dark: #5d4037; 
             --text-light: #795548; 
             --border-main: #8b4513; 
             --border-accent: #654321; 
-            
             --button-bg: var(--border-main);
             --button-text: #faf0e6; 
             --button-hover-bg: #a0522d;
-
             --accent-color: #a0522d; 
-
             --feedback-green: #6B8E23; 
             --feedback-yellow: #DAA520; 
             --feedback-gray: #9e8a78;  
             --feedback-key-gray: #887564; 
-
             --font-main: 'AA-Galaxy', 'Kalam', cursive; 
             --font-en: 'Kalam', cursive; 
-
-            /* Gradient colors for the animated background */
             --gradient-color-1: #FF0000; 
             --gradient-color-2: #FFA500; 
             --gradient-color-3: #FFFF00; 
@@ -61,7 +54,6 @@
             );
             background-size: 600% 600%; 
             animation: gradientBG 30s ease infinite; 
-            
             overflow-y: auto; 
             overflow-x: hidden;
             color: var(--text-dark); 
@@ -105,6 +97,11 @@
             border-color: var(--accent-color); 
             background-color: rgba(245, 233, 211, 0.98);
         }
+        .sketch-input[readonly] {
+            background-color: rgba(220, 210, 195, 0.7); /* Slightly different bg for readonly */
+            cursor: default;
+        }
+
 
         .sketch-button {
             background-color: var(--button-bg);
@@ -115,6 +112,9 @@
             font-weight: 700; border-radius: 0.3rem; padding: 0.7rem; 
             font-size: 1rem; 
             width: 100%; cursor: pointer;
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
         }
         .sketch-button:hover {
             background-color: var(--button-hover-bg);
@@ -145,43 +145,68 @@
             font-style: italic;
         }
 
-
-        .letter-box { 
+        .letter-box, .letter-input-field { 
             width: 40px; height: 40px; 
             border: 2px solid var(--border-main); 
             display: flex; justify-content: center; align-items: center; 
             font-size: 1.5rem; 
             margin: 2px; 
             border-radius: 4px; 
-            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
             text-transform: uppercase; 
             background-color: rgba(245, 233, 211, 0.75); 
             color: var(--text-dark); 
             position: relative;
-            box-shadow: 1px 1px 0px rgba(93, 64, 55, 0.15); 
+            box-shadow: 1px 1px 0px rgba(93, 64, 55, 0.15);
+            font-family: var(--font-main);
+            text-align: center; 
+            padding: 0; 
+            box-sizing: border-box; 
         }
-        .letter-box.lang-en { font-family: var(--font-en); font-weight:400; font-size: 1.4rem; }
+        .letter-box.lang-en, .letter-input-field.lang-en { font-family: var(--font-en); font-weight:400; font-size: 1.4rem; }
         
-        .letter-box.green {
-            background-color: var(--feedback-green); 
-            border-color: var(--feedback-green); 
-            color: #ffffff; 
+        .letter-box.green, .letter-input-field.green  { 
+            background-color: var(--feedback-green) !important; 
+            border-color: var(--feedback-green) !important; 
+            color: #ffffff !important; 
             text-shadow: 1px 1px 0px rgba(0,0,0,0.2);
+        }
+        .letter-box.yellow, .letter-input-field.yellow {
+            background-color: var(--feedback-yellow) !important; 
+            border-color: #b8860b !important; 
+            color: var(--text-dark) !important; 
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+        }
+        .letter-box.gray, .letter-input-field.gray { 
+            background-color: var(--feedback-gray) !important; 
+            border-color: #857669 !important; 
+            color: #ffffff !important; opacity: 0.9;
+        }
+        .letter-box.empty, .letter-input-field.empty { border-color: var(--border-main); border-style: solid;}
+        
+        .letter-input-field:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px var(--accent-color), 1px 1px 0px rgba(93, 64, 55, 0.1); 
+        }
+        .letter-input-field.next-input { 
+             border-color: var(--accent-color);
+             box-shadow: 0 0 0 2px var(--accent-color), 1px 1px 0px rgba(93, 64, 55, 0.1); 
+        }
+        .letter-input-field[readonly] {
+            background-color: rgba(220, 210, 195, 0.7); /* Slightly different bg for readonly game inputs */
+            cursor: default;
+        }
+
+
+        .guess-row .letter-box { 
+             transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55); 
+        }
+        .guess-row .letter-box.green {
             transform: scale(1.05) rotate(-2deg); 
         }
-        .letter-box.yellow {
-            background-color: var(--feedback-yellow); 
-            border-color: #b8860b; 
-            color: var(--text-dark); 
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+        .guess-row .letter-box.yellow {
             transform: scale(1.03) rotate(2deg); 
         }
-        .letter-box.gray { 
-            background-color: var(--feedback-gray); 
-            border-color: #857669; 
-            color: #ffffff; opacity: 0.9;
-        }
-        .letter-box.empty { border-color: var(--border-main); border-style: solid;}
 
         .guess-row {
             opacity: 1; transform: translateY(0); 
@@ -284,12 +309,22 @@
 
 
         .checkbox-group { display: flex; align-items: center; margin-top: 0.3rem; margin-bottom: 0.3rem; } 
+        .checkbox-group.justify-center { justify-content: center; } 
         .checkbox-group input[type="checkbox"] {
             appearance: none; width: 1em; height: 1em; border: 2px solid var(--border-main); 
             border-radius: 0.2rem; margin-left: 0.4rem; cursor: pointer; 
             position: relative; background-color: #faf0e6; 
             transition: background-color 0.2s;
         }
+        body[dir="rtl"] .checkbox-group input[type="checkbox"] {
+            margin-left: 0;
+            margin-right: 0.4rem;
+        }
+        body[dir="ltr"] .checkbox-group input[type="checkbox"] {
+            margin-left: 0.4rem;
+            margin-right: 0;
+        }
+
         .checkbox-group input[type="checkbox"]:checked { background-color: var(--feedback-green); border-color: var(--feedback-green);}
         .checkbox-group input[type="checkbox"]:checked::before {
             content: '✓'; font-size: 0.7em; color: #fff; 
@@ -313,7 +348,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-wrap: wrap; /* Ensures letters wrap if word is too long */
+            flex-wrap: wrap; 
             gap: 4px; 
             margin-bottom: 0.5rem; 
             direction: ltr; 
@@ -321,30 +356,9 @@
         #letter-input-area.rtl {
             flex-direction: row-reverse; 
         }
-        .letter-input-box { 
-            width: 40px; 
-            height: 40px;
-            border: 2px solid var(--border-main);
-            background-color: rgba(245, 233, 211, 0.85);
-            border-radius: 4px;
-            text-align: center;
-            font-size: 1.5rem; 
-            font-family: var(--font-main); 
-            color: var(--text-dark);
-            text-transform: uppercase;
-            box-shadow: 1px 1px 0px rgba(93, 64, 55, 0.1);
-            display: flex; 
-            align-items: center;
-            justify-content: center;
-            user-select: none; 
-        }
-        .letter-input-box.lang-en { font-family: var(--font-en); font-size: 1.4rem; }
-        .letter-input-box.next-input { 
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 2px var(--accent-color), 1px 1px 0px rgba(93, 64, 55, 0.1); 
-        }
-
-        #keyboard-area {
+       
+        /* Common style for both game and setup keyboards */
+        .keyboard-area-common {
             margin-top: 0.5rem; 
             padding: 0.25rem; 
             background-color: rgba(245, 233, 211, 0.4); 
@@ -356,7 +370,7 @@
             justify-content: center;
             margin-bottom: 2px; 
             flex-wrap: wrap; 
-            max-width: 100%; /* Ensures row does not exceed parent width */
+            max-width: 100%; 
         }
         .keyboard-row:last-child { margin-bottom: 0; }
         .key {
@@ -420,7 +434,15 @@
                     <div id="manual-word-preview" class="letter-preview-container">
                     </div>
                 </div>
-                <div class="input-group">
+                 <div class="checkbox-group">
+                    <input type="checkbox" id="toggle-setup-keyboard-checkbox">
+                    <label for="toggle-setup-keyboard-checkbox">إظهار لوحة مفاتيح لإدخال الكلمة السرية</label>
+                </div>
+                <div id="setup-keyboard-area" class="hidden keyboard-area-common">
+                    <!-- Setup keyboard will be rendered here -->
+                </div>
+
+                <div class="input-group mt-3"> 
                     <label for="manual-attempts" class="input-label">عدد الألوان (المحاولات):</label>
                     <input type="number" id="manual-attempts" value="25" min="1" max="30" class="sketch-input"> 
                 </div>
@@ -429,7 +451,7 @@
                     <label for="manual-infinite-attempts-checkbox">ألوان لا نهائية</label>
                 </div>
                 <div id="manual-infinite-confirm" class="confirmation-message"></div>
-                <button id="start-manual-game" class="sketch-button mt-1">ابدأ بالكلمة</button> 
+                <button id="start-manual-game" class="sketch-button mt-2">ابدأ بالكلمة</button> 
             </div>
 
             <div id="robot-settings" class="hidden">
@@ -476,12 +498,19 @@
             
             <div id="letter-input-area-container" class="my-1.5">
                 <div id="letter-input-area">
+                    <!-- Letter input boxes will be generated here by JS -->
                 </div>
+            </div>
+
+            <div class="checkbox-group justify-center my-3">
+                <input type="checkbox" id="toggle-keyboard-checkbox">
+                <label for="toggle-keyboard-checkbox">إظهار لوحة المفاتيح الافتراضية</label>
             </div>
 
             <button id="submit-guess" class="sketch-button">أرسل تخمينك</button>
             
-            <div id="keyboard-area">
+            <div id="keyboard-area" class="keyboard-area-common">
+                <!-- Virtual keyboard will be generated here by JS -->
             </div>
             <div id="message-area" class="text-center min-h-[1.8em] text-sm font-semibold"></div> 
         </div>
@@ -521,10 +550,8 @@
         const currentWordLangInfo = document.getElementById('current-word-lang-info');
         const guessGridContainer = document.getElementById('guess-grid-container');
         const guessGrid = document.getElementById('guess-grid');
-        
         const letterInputArea = document.getElementById('letter-input-area');
         let letterDisplayElements = []; 
-
         const submitGuessButton = document.getElementById('submit-guess');
         const messageArea = document.getElementById('message-area'); 
         const setupMessageArea = document.getElementById('setup-message-area'); 
@@ -533,36 +560,57 @@
         const modalMessage = document.getElementById('modal-message');
         const modalCorrectWord = document.getElementById('modal-correct-word');
         const playAgainButton = document.getElementById('play-again');
-        const keyboardArea = document.getElementById('keyboard-area');
-        
+        const keyboardArea = document.getElementById('keyboard-area'); 
+        const toggleKeyboardCheckbox = document.getElementById('toggle-keyboard-checkbox'); 
+
+        const toggleSetupKeyboardCheckbox = document.getElementById('toggle-setup-keyboard-checkbox');
+        const setupKeyboardArea = document.getElementById('setup-keyboard-area');
+
+        // Game State
         let secretWord = '', totalAttempts = 0, remainingAttempts = 0, gameActive = false, wordLength = 0, currentWordLang = 'ar';
         let isInfiniteAttempts = false;
         const MAX_VISIBLE_FULL_OPACITY_ROWS = 5; 
         let wordList = []; 
         let currentGuessArray = []; 
         let letterStates = {}; 
+        let isVirtualKeyboardActive = true; 
+        let currentSetupKeyboardLang = 'ar'; 
 
-        // Updated Arabic keyboard layout
-        const arabicKeys = [
-            ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'و'], // Row 1 + 'و'
-            ['خ', 'ح', 'ج', 'د', 'ش', 'س', 'ي', 'ب', 'ز'], // Row 2 + 'ز'
-            ['ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ط', 'ظ'],   // Row 3 + 'ظ'
-            ['ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة', 'ذ'],   // Row 4 + 'ذ'
-            ['مسح', 'إدخال'] // Special keys
+        const arabicPureKeys = [ 
+            ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج', 'د'],
+            ['ش', 'س', 'ي', 'ب', 'ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ط'],
+            ['ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة', 'و', 'ز', 'ظ', 'ذ'],
+            ['مسح'] 
+        ];
+       const englishPureKeys = [ 
+            ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+            ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+            ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
+            ['Backspace'] 
         ];
 
-        const englishKeys = [ 
+        const gameArabicKeys = [ 
+            ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'و'],
+            ['خ', 'ح', 'ج', 'د', 'ش', 'س', 'ي', 'ب', 'ز'],
+            ['ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ط', 'ظ'], 
+            ['ئ', 'ء', 'ؤ', 'ر', 'لا', 'ى', 'ة', 'ذ'], 
+            ['مسح', 'إدخال']
+        ];
+        const gameEnglishKeys = [ 
             ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
             ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
             ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
             ['Backspace', 'Enter']
         ];
 
+        const validArabicChars = arabicPureKeys.flat().filter(k => k.length === 1 && k !== 'لا' && k !== 'ى');
+        const validEnglishChars = englishPureKeys.flat().filter(k => k.length === 1);
+
         function setRainbowGradientBackground() {
             const colors = ['#FF4E50', '#FC913A', '#F9D423', '#EDE574', '#E1F5C4', '#ADD8E6', '#8A2BE2', '#FF00FF', '#00FFFF'];
             let shuffledColors = colors.sort(() => 0.5 - Math.random());
             for (let i = 1; i <= 7; i++) {
-                 document.documentElement.style.setProperty(`--gradient-color-${i}`, shuffledColors[i-1 % shuffledColors.length]);
+                document.documentElement.style.setProperty(`--gradient-color-${i}`, shuffledColors[i-1 % shuffledColors.length]);
             }
         }
 
@@ -570,14 +618,16 @@
             try {
                 loadingMessage.classList.remove('hidden');
                 startRandomGameButton.disabled = true;
-                // Simulating API call or local file load
+                await new Promise(resolve => setTimeout(resolve, 500)); 
                 wordList = [
                     {"lang": "ar", "word": "كتاب", "attempts": 6}, {"lang": "ar", "word": "قلم", "attempts": 5},
                     {"lang": "ar", "word": "مدرسة", "attempts": 7}, {"lang": "ar", "word": "شمس", "attempts": 5},
                     {"lang": "ar", "word": "طاولة", "attempts": 6}, {"lang": "ar", "word": "بستان", "attempts": 7},
+                    {"lang": "ar", "word": "سيارة", "attempts": 6}, {"lang": "ar", "word": "منزل", "attempts": 5},
                     {"lang": "en", "word": "apple", "attempts": 6}, {"lang": "en", "word": "grape", "attempts": 5},
                     {"lang": "en", "word": "world", "attempts": 5}, {"lang": "en", "word": "coder", "attempts": 5},
-                    {"lang": "en", "word": "pencil", "attempts": 6}, {"lang": "en", "word": "garden", "attempts": 7}
+                    {"lang": "en", "word": "pencil", "attempts": 6}, {"lang": "en", "word": "garden", "attempts": 7},
+                    {"lang": "en", "word": "purple", "attempts": 6}, {"lang": "en", "word": "orange", "attempts": 6}
                 ];
                 if (!Array.isArray(wordList)) throw new Error("Word list is not a valid JSON array.");
                 startRandomGameButton.disabled = false; 
@@ -611,23 +661,6 @@
             }
             manualWordPreview.style.minHeight = '30px';
         }
-        manualSecretWordInput.addEventListener('input', updateManualWordPreview);
-
-        robotLangSwitch.querySelectorAll('button').forEach(button => {
-            button.addEventListener('click', () => {
-                robotLangSwitch.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-            });
-        });
-
-        organizerModeBtn.addEventListener('click', () => switchMode('organizer'));
-        robotModeBtn.addEventListener('click', () => switchMode('robot'));
-        manualInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('manual'));
-        robotInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('robot'));
-        startManualGameButton.addEventListener('click', () => initGame('manual'));
-        startRandomGameButton.addEventListener('click', () => initGame('random'));
-        submitGuessButton.addEventListener('click', handleGuess);
-        playAgainButton.addEventListener('click', resetGame);
 
         function switchMode(mode) {
             if (mode === 'organizer') {
@@ -638,11 +671,20 @@
                 manualSecretWordInput.focus();
                 updateManualWordPreview(); 
                 setupMessageArea.textContent = '';
-            } else { // robot mode
+                // Update setup keyboard based on current input and checkbox state
+                manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
+                if (toggleSetupKeyboardCheckbox.checked) {
+                    const lang = detectLanguage(manualSecretWordInput.value) || 'ar';
+                    renderSetupKeyboard(lang);
+                } else {
+                    setupKeyboardArea.classList.add('hidden');
+                }
+            } else { 
                 robotModeBtn.classList.add('active');
                 organizerModeBtn.classList.remove('active');
                 robotSettings.classList.remove('hidden');
                 organizerSettings.classList.add('hidden');
+                setupKeyboardArea.classList.add('hidden'); 
                 if (wordList.length === 0 && loadingMessage.classList.contains('hidden')) { 
                     loadWordList(); 
                 } else if (wordList.length > 0) {
@@ -669,7 +711,7 @@
                     manualAttemptsInput.value = '25'; 
                     manualInfiniteConfirm.textContent = ''; 
                 }
-            } else { // robot mode
+            } else { 
                 isInfiniteAttempts = robotInfiniteAttemptsCheckbox.checked;
                 if (isInfiniteAttempts) {
                     showConfirmation(robotInfiniteConfirm, "الألوان الآن لا نهائية!");
@@ -687,7 +729,9 @@
 
             if (hasArabic && !hasEnglish) return 'ar';
             if (hasEnglish && !hasArabic) return 'en';
-            return 'mixed'; 
+            if (text.length > 0 && hasArabic) return 'ar'; 
+            if (text.length > 0 && hasEnglish) return 'en';
+            return text.length === 0 ? currentSetupKeyboardLang : 'mixed'; 
         }
 
         function initGame(mode) {
@@ -695,22 +739,27 @@
             let word = '';
             let attempts = 0;
             isInfiniteAttempts = (mode === 'manual' && manualInfiniteAttemptsCheckbox.checked) || 
-                                 (mode === 'robot' && robotInfiniteAttemptsCheckbox.checked);
+                                 (mode !== 'manual' && robotInfiniteAttemptsCheckbox.checked); 
 
             if (mode === 'manual') {
-                word = manualSecretWordInput.value.trim().toLowerCase();
-                currentWordLang = detectLanguage(word);
-
-                if (currentWordLang === 'mixed' || word === '') {
+                word = manualSecretWordInput.value.trim(); 
+                let detectedLang = detectLanguage(word);
+                
+                if (word === '' || (detectedLang === 'mixed' && word.length > 0)) { 
                      showMessage("طور الرسام: كلمة غير صالحة. الرجاء إدخال كلمة بحروف عربية فقط أو إنجليزية فقط.", true, true); return;
                 }
+                currentWordLang = detectedLang === 'mixed' ? 'ar' : detectedLang; 
+                word = word.toLowerCase(); 
+                isVirtualKeyboardActive = true; 
+
                 if (!isInfiniteAttempts) {
                     attempts = parseInt(manualAttemptsInput.value);
                     if (isNaN(attempts) || attempts < 1) {
                         showMessage("طور الرسام: عدد ألوان (محاولات) غير صحيح.", true, true); return;
                     }
                 } else { attempts = Infinity; } 
-            } else { // random mode
+            } else { 
+                isVirtualKeyboardActive = true; 
                 if (wordList.length === 0) {
                     showMessage("قائمة كلمات الكرّاس لم تحمل أو فارغة. لا يمكن بدء اللعبة.", true, true); return;
                 }
@@ -747,214 +796,17 @@
             updateAttemptsDisplay(); 
             
             createLetterDisplayElements(); 
-            renderKeyboard(currentWordLang); 
+            
+            toggleKeyboardCheckbox.checked = isVirtualKeyboardActive; 
+            keyboardArea.classList.toggle('hidden', !isVirtualKeyboardActive);
+            updateLetterInputsState(); 
+            
+            renderGameKeyboard(currentWordLang); 
             updateKeyboardKeyColors(); 
             
             guessGrid.innerHTML = ''; 
             messageArea.textContent = ''; 
             updateNextInputHighlight(); 
-        }
-
-        function createLetterDisplayElements() {
-            letterInputArea.innerHTML = ''; 
-            letterDisplayElements = []; 
-
-            if (currentWordLang === 'ar') {
-                letterInputArea.classList.add('rtl'); 
-            } else {
-                letterInputArea.classList.remove('rtl'); 
-            }
-
-            for (let i = 0; i < wordLength; i++) {
-                const displayBox = document.createElement('div'); 
-                displayBox.classList.add('letter-input-box'); 
-                if (currentWordLang === 'en') { 
-                    displayBox.classList.add('lang-en');
-                }
-                displayBox.dataset.index = i; 
-                letterDisplayElements.push(displayBox);
-                letterInputArea.appendChild(displayBox);
-            }
-            updateLetterDisplay(); 
-        }
-        
-        function updateLetterDisplay() {
-            letterDisplayElements.forEach((box, index) => {
-                box.textContent = currentGuessArray[index] ? currentGuessArray[index].toUpperCase() : '';
-            });
-            updateNextInputHighlight();
-        }
-
-        function updateNextInputHighlight() {
-            let nextEmptyIndex = currentGuessArray.findIndex(char => char === '');
-            letterDisplayElements.forEach((box, index) => {
-                if (gameActive && index === nextEmptyIndex) { 
-                    box.classList.add('next-input');
-                } else {
-                    box.classList.remove('next-input');
-                }
-            });
-        }
-
-        function handleVirtualKeyboardLetter(char) {
-            if (!gameActive) return;
-            const nextEmptyIndex = currentGuessArray.findIndex(c => c === ''); 
-            if (nextEmptyIndex !== -1) { 
-                currentGuessArray[nextEmptyIndex] = char; 
-                updateLetterDisplay(); 
-            }
-        }
-
-        function handleVirtualKeyboardBackspace() {
-            if (!gameActive) return;
-            for (let i = wordLength - 1; i >= 0; i--) { 
-                if (currentGuessArray[i] !== '') {
-                    currentGuessArray[i] = ''; 
-                    updateLetterDisplay(); 
-                    return; 
-                }
-            }
-        }
-
-        function handleGuess() {
-            if (!gameActive) return;
-
-            const guess = currentGuessArray.join('').toLowerCase();
-
-            if (guess.length !== wordLength) {
-                showMessage(`التخمين يجب أن يكون ${wordLength} حروف.`, true, false); return;
-            }
-            
-            if (!isInfiniteAttempts) {
-                if (remainingAttempts > 0) remainingAttempts--; 
-            }
-            updateAttemptsDisplay(); 
-            const evaluation = evaluateGuess(guess, secretWord); 
-            
-            evaluation.forEach(evalItem => {
-                const letter = evalItem.letter.toLowerCase();
-                const currentColor = letterStates[letter];
-                const newColor = evalItem.color;
-
-                if (!currentColor || 
-                    (newColor === 'green') || 
-                    (newColor === 'yellow' && currentColor !== 'green')) {
-                    letterStates[letter] = newColor;
-                }
-            });
-            updateKeyboardKeyColors(); 
-
-            const newRow = createGuessRow(guess, evaluation); 
-            guessGrid.appendChild(newRow); 
-            guessGridContainer.scrollTop = guessGridContainer.scrollHeight; 
-
-            const rows = Array.from(guessGrid.children);
-            rows.slice(0, -MAX_VISIBLE_FULL_OPACITY_ROWS).forEach(r => r.classList.add('fading-out'));
-            rows.slice(-MAX_VISIBLE_FULL_OPACITY_ROWS).forEach(r => r.classList.remove('fading-out'));
-            
-            let maxLetterAnimationTime = wordLength * 100 + 500; 
-            if (guess === secretWord) {
-                gameActive = false;
-                setTimeout(() => showModal(true, "🎨 اكتملت اللوحة! 🎨"), maxLetterAnimationTime);
-            } else if (!isInfiniteAttempts && remainingAttempts <= 0) {
-                gameActive = false;
-                setTimeout(() => showModal(false, "انتهت الألوان!"), maxLetterAnimationTime);
-            } else {
-                currentGuessArray = Array(wordLength).fill('');
-                updateLetterDisplay(); 
-            }
-        }
-
-        function createGuessRow(guess, precomputedEvaluation = null) { 
-            const row = document.createElement('div');
-            row.classList.add('flex', 'justify-center', 'guess-row');
-
-            if (currentWordLang === 'ar') {
-                row.style.direction = 'rtl'; 
-                row.style.flexDirection = 'row'; 
-            } else { 
-                row.style.direction = 'ltr'; 
-                row.style.flexDirection = 'row'; 
-            }
-
-            const evaluation = precomputedEvaluation || evaluateGuess(guess, secretWord); 
-            evaluation.forEach((evalItem, index) => {
-                const cell = document.createElement('div');
-                cell.classList.add('letter-box');
-                if (currentWordLang === 'en') { 
-                     cell.classList.add('lang-en');
-                }
-                setTimeout(() => {
-                    cell.textContent = evalItem.letter.toUpperCase();
-                    cell.classList.add(evalItem.color); 
-                }, index * 80); 
-                row.appendChild(cell);
-            });
-            return row;
-        }
-        
-        function evaluateGuess(guess, secret) { 
-            const result = []; 
-            const secretChars = secret.split(''); 
-            const guessChars = guess.split('');
-            const tempSecretCounts = {}; 
-
-            for (let i = 0; i < secret.length; i++) {
-                result[i] = { letter: guessChars[i], color: 'gray' }; 
-                tempSecretCounts[secretChars[i]] = (tempSecretCounts[secretChars[i]] || 0) + 1;
-            }
-
-            for (let i = 0; i < secret.length; i++) {
-                if (guessChars[i] === secretChars[i]) {
-                    result[i].color = 'green';
-                    tempSecretCounts[guessChars[i]]--; 
-                }
-            }
-
-            for (let i = 0; i < secret.length; i++) {
-                if (result[i].color !== 'green') { 
-                    if (secretChars.includes(guessChars[i]) && tempSecretCounts[guessChars[i]] > 0) {
-                        result[i].color = 'yellow'; tempSecretCounts[guessChars[i]]--; 
-                    }
-                }
-            }
-            return result;
-        }
-
-        function updateAttemptsDisplay() {
-            if (isInfiniteAttempts) {
-                attemptsInfoDisplay.classList.add('hidden'); 
-            } else {
-                attemptsInfoDisplay.classList.remove('hidden');
-                attemptsInfoDisplay.textContent = `الألوان المتبقية: ${remainingAttempts}`;
-            }
-        }
-
-        function showMessage(msg, isError = false, onSetupScreen = false) { 
-            const targetMessageArea = onSetupScreen ? setupMessageArea : messageArea;
-            if (!targetMessageArea) { 
-                console.error("Target message area not found for message:", msg);
-                return;
-            }
-            targetMessageArea.textContent = msg;
-            targetMessageArea.className = 'text-center min-h-[1.8em] text-sm font-semibold'; 
-            if(onSetupScreen) targetMessageArea.classList.add('mt-2'); 
-
-            if (isError) targetMessageArea.classList.add('text-[var(--color-red)]'); 
-            else targetMessageArea.classList.add('text-[var(--text-light)]'); 
-        }
-
-        function showModal(isWin, titleMsg) { 
-            modal.classList.remove('hidden'); modalTitle.textContent = titleMsg;
-            if (isWin) {
-                modalMessage.textContent = `لقد أبدعت في رسم الكلمة: "${secretWord.toUpperCase()}"!`;
-                modalCorrectWord.textContent = ""; 
-            } else {
-                modalMessage.textContent = "للأسف، لم تكتمل اللوحة هذه المرة!";
-                modalCorrectWord.textContent = `الكلمة الصحيحة كانت: ${secretWord.toUpperCase()}`;
-            }
-            submitGuessButton.disabled = true; 
-            keyboardArea.classList.add('opacity-50', 'pointer-events-none'); 
         }
 
         function resetGame() { 
@@ -964,10 +816,13 @@
             
             switchMode('organizer'); 
             manualSecretWordInput.value = '';
+            manualSecretWordInput.readOnly = false; // Ensure it's writable on reset
             updateManualWordPreview(); 
             manualAttemptsInput.value = '25'; 
             manualAttemptsInput.disabled = false;
             manualInfiniteAttemptsCheckbox.checked = false;
+            toggleSetupKeyboardCheckbox.checked = false; 
+            setupKeyboardArea.classList.add('hidden');
             manualInfiniteConfirm.textContent = ''; 
             
             robotInfiniteAttemptsCheckbox.checked = false;
@@ -986,13 +841,271 @@
             gameActive = false; 
             submitGuessButton.disabled = false; 
             attemptsInfoDisplay.classList.remove('hidden'); 
+            
+            isVirtualKeyboardActive = true; 
+            toggleKeyboardCheckbox.checked = true;
+            keyboardArea.classList.remove('hidden');
             keyboardArea.innerHTML = ''; 
+            
             keyboardArea.classList.remove('opacity-50', 'pointer-events-none'); 
             setRainbowGradientBackground(); 
             setupMessageArea.textContent = ''; 
         }
 
-        function updateKeyboardKeyColors() {
+        function createLetterDisplayElements() {
+            letterInputArea.innerHTML = ''; 
+            letterDisplayElements = []; 
+            letterInputArea.classList.toggle('rtl', currentWordLang === 'ar');
+            for (let i = 0; i < wordLength; i++) {
+                const inputField = document.createElement('input'); 
+                inputField.type = 'text';
+                inputField.maxLength = 1;
+                inputField.classList.add('letter-input-field'); 
+                if (currentWordLang === 'en') { 
+                    inputField.classList.add('lang-en');
+                }
+                inputField.dataset.index = i; 
+                inputField.autocomplete = 'off'; 
+                inputField.addEventListener('input', handleDirectInput);
+                inputField.addEventListener('keydown', handleDirectInputKeydown);
+                inputField.addEventListener('focus', (e) => e.target.select()); 
+                letterDisplayElements.push(inputField);
+                letterInputArea.appendChild(inputField);
+            }
+            updateLetterDisplay(); 
+        }
+
+        function updateLetterInputsState() { 
+            letterDisplayElements.forEach(input => {
+                input.readOnly = isVirtualKeyboardActive;
+            });
+            if (!isVirtualKeyboardActive && gameActive) {
+                const firstEmpty = letterDisplayElements.find(input => !input.value);
+                if (firstEmpty) {
+                    firstEmpty.focus();
+                } else if (letterDisplayElements.length > 0) {
+                    letterDisplayElements[0].focus();
+                }
+            }
+        }
+        
+        function updateLetterDisplay() { 
+            letterDisplayElements.forEach((inputField, index) => {
+                inputField.value = currentGuessArray[index] ? currentGuessArray[index].toUpperCase() : '';
+            });
+        }
+        
+        function handleDirectInput(event) { 
+            if (isVirtualKeyboardActive || !gameActive) return;
+            const inputField = event.target;
+            const index = parseInt(inputField.dataset.index);
+            let value = inputField.value;
+            if (value.length > 1) value = value.slice(-1); 
+            inputField.value = value.toUpperCase(); 
+            const char = value.toLowerCase();
+            let isValidChar = (currentWordLang === 'ar' && validArabicChars.includes(char)) || (currentWordLang === 'en' && validEnglishChars.includes(char));
+            if (value && isValidChar) {
+                currentGuessArray[index] = char;
+                if (index < wordLength - 1) letterDisplayElements[index + 1].focus();
+                else inputField.blur(); 
+            } else if (value && !isValidChar) {
+                currentGuessArray[index] = ''; inputField.value = '';       
+            } else if (!value) currentGuessArray[index] = '';
+        }
+
+        function handleDirectInputKeydown(event) { 
+            if (isVirtualKeyboardActive || !gameActive) return;
+            const inputField = event.target;
+            const index = parseInt(inputField.dataset.index);
+            if (event.key === 'Backspace') {
+                if (inputField.value === '' && index > 0) {
+                    event.preventDefault(); currentGuessArray[index] = ''; 
+                    letterDisplayElements[index - 1].focus();
+                    letterDisplayElements[index-1].value = ''; currentGuessArray[index-1] = ''; 
+                } else if (inputField.value !== '') {
+                    setTimeout(() => { currentGuessArray[index] = inputField.value.toLowerCase(); }, 0);
+                }
+            } else if (event.key === 'ArrowLeft' && index > 0) { event.preventDefault(); letterDisplayElements[index - 1].focus(); }
+            else if (event.key === 'ArrowRight' && index < wordLength - 1) { event.preventDefault(); letterDisplayElements[index + 1].focus(); }
+            else if (event.key === 'Enter') { event.preventDefault(); handleGuess(); }
+            else if (event.key.length === 1) { 
+                const char = event.key.toLowerCase();
+                if (!((currentWordLang === 'ar' && validArabicChars.includes(char)) || (currentWordLang === 'en' && validEnglishChars.includes(char)))) {
+                    event.preventDefault();
+                }
+            }
+        }
+
+        function updateNextInputHighlight() { 
+            if (!gameActive || !isVirtualKeyboardActive) { 
+                 letterDisplayElements.forEach(el => el.classList.remove('next-input'));
+                 return;
+            }
+            let nextEmptyIndex = currentGuessArray.findIndex(char => char === '');
+            letterDisplayElements.forEach((inputField, idx) => {
+                inputField.classList.toggle('next-input', idx === nextEmptyIndex && isVirtualKeyboardActive);
+            });
+        }
+
+        function handleVirtualKeyboardLetter(char) { 
+            if (!gameActive) return;
+            const nextEmptyIndex = currentGuessArray.findIndex(c => c === ''); 
+            if (nextEmptyIndex !== -1) { 
+                currentGuessArray[nextEmptyIndex] = char.toLowerCase(); 
+                updateLetterDisplay(); 
+                updateNextInputHighlight(); 
+            }
+        }
+
+        function handleVirtualKeyboardBackspace() { 
+            if (!gameActive) return;
+            for (let i = wordLength - 1; i >= 0; i--) { 
+                if (currentGuessArray[i] !== '') {
+                    currentGuessArray[i] = ''; 
+                    updateLetterDisplay(); 
+                    updateNextInputHighlight();
+                    return; 
+                }
+            }
+        }
+
+        function handleGuess() {
+            if (!gameActive) return;
+            if (!isVirtualKeyboardActive) { 
+                letterDisplayElements.forEach((input, index) => {
+                    currentGuessArray[index] = input.value.toLowerCase();
+                });
+            }
+            const guess = currentGuessArray.join('').toLowerCase();
+            if (guess.length !== wordLength) {
+                showMessage(`التخمين يجب أن يكون ${wordLength} حروف.`, true, false); return;
+            }
+            if (!isInfiniteAttempts && remainingAttempts > 0) remainingAttempts--; 
+            updateAttemptsDisplay(); 
+            const evaluation = evaluateGuess(guess, secretWord); 
+            evaluation.forEach(evalItem => {
+                const letter = evalItem.letter.toLowerCase();
+                const currentColor = letterStates[letter];
+                const newColor = evalItem.color;
+                if (!currentColor || (newColor === 'green') || (newColor === 'yellow' && currentColor !== 'green')) {
+                    letterStates[letter] = newColor;
+                }
+            });
+            updateKeyboardKeyColors(); 
+            const newRow = createGuessRowDivs(guess, evaluation); 
+            guessGrid.appendChild(newRow); 
+            guessGridContainer.scrollTop = guessGridContainer.scrollHeight; 
+            const rows = Array.from(guessGrid.children);
+            rows.slice(0, -MAX_VISIBLE_FULL_OPACITY_ROWS).forEach(r => r.classList.add('fading-out'));
+            rows.slice(-MAX_VISIBLE_FULL_OPACITY_ROWS).forEach(r => r.classList.remove('fading-out'));
+            let maxLetterAnimationTime = wordLength * 100 + 500; 
+            if (guess === secretWord) {
+                gameActive = false; updateNextInputHighlight(); 
+                setTimeout(() => showModal(true, "🎨 اكتملت اللوحة! 🎨"), maxLetterAnimationTime);
+            } else if (!isInfiniteAttempts && remainingAttempts <= 0) {
+                gameActive = false; updateNextInputHighlight(); 
+                setTimeout(() => showModal(false, "انتهت الألوان!"), maxLetterAnimationTime);
+            } else {
+                currentGuessArray = Array(wordLength).fill('');
+                updateLetterDisplay(); 
+                if (!isVirtualKeyboardActive && letterDisplayElements.length > 0) letterDisplayElements[0].focus(); 
+                else updateNextInputHighlight(); 
+            }
+        }
+
+        function createGuessRowDivs(guess, precomputedEvaluation = null) { 
+            const row = document.createElement('div');
+            row.classList.add('flex', 'justify-center', 'guess-row');
+            row.style.direction = (currentWordLang === 'ar') ? 'rtl' : 'ltr';
+            const evaluation = precomputedEvaluation || evaluateGuess(guess, secretWord); 
+            evaluation.forEach((evalItem) => {
+                const cell = document.createElement('div'); 
+                cell.classList.add('letter-box'); 
+                if (currentWordLang === 'en') cell.classList.add('lang-en');
+                cell.classList.add(evalItem.color); 
+                cell.textContent = evalItem.letter.toUpperCase();
+                row.appendChild(cell);
+            });
+            return row;
+        }
+        
+        function evaluateGuess(guess, secret) { 
+            const result = []; const secretChars = secret.split(''); const guessChars = guess.split('');
+            const tempSecretCounts = {}; 
+            for (let i = 0; i < secret.length; i++) {
+                result[i] = { letter: guessChars[i], color: 'gray' }; 
+                tempSecretCounts[secretChars[i]] = (tempSecretCounts[secretChars[i]] || 0) + 1;
+            }
+            for (let i = 0; i < secret.length; i++) {
+                if (guessChars[i] === secretChars[i]) {
+                    result[i].color = 'green'; tempSecretCounts[guessChars[i]]--; 
+                }
+            }
+            for (let i = 0; i < secret.length; i++) {
+                if (result[i].color !== 'green' && secretChars.includes(guessChars[i]) && tempSecretCounts[guessChars[i]] > 0) {
+                    result[i].color = 'yellow'; tempSecretCounts[guessChars[i]]--; 
+                }
+            }
+            return result;
+        }
+
+        function updateAttemptsDisplay() {
+            attemptsInfoDisplay.classList.toggle('hidden', isInfiniteAttempts);
+            if (!isInfiniteAttempts) attemptsInfoDisplay.textContent = `الألوان المتبقية: ${remainingAttempts}`;
+        }
+
+        function showMessage(msg, isError = false, onSetupScreen = false) { 
+            const targetMessageArea = onSetupScreen ? setupMessageArea : messageArea;
+            if (!targetMessageArea) { console.error("Target message area not found:", msg); return; }
+            targetMessageArea.textContent = msg;
+            targetMessageArea.className = `text-center min-h-[1.8em] text-sm font-semibold ${onSetupScreen ? 'mt-2' : ''} ${isError ? 'text-red-600' : 'text-[var(--text-light)]'}`;
+        }
+
+        function showModal(isWin, titleMsg) { 
+            modal.classList.remove('hidden'); modalTitle.textContent = titleMsg;
+            modalMessage.textContent = isWin ? `لقد أبدعت في رسم الكلمة: "${secretWord.toUpperCase()}"!` : "للأسف، لم تكتمل اللوحة هذه المرة!";
+            modalCorrectWord.textContent = isWin ? "" : `الكلمة الصحيحة كانت: ${secretWord.toUpperCase()}`;
+            submitGuessButton.disabled = true; 
+            keyboardArea.classList.add('opacity-50', 'pointer-events-none'); 
+            letterDisplayElements.forEach(input => input.readOnly = true); 
+        }
+
+        function renderSetupKeyboard(lang) {
+            setupKeyboardArea.innerHTML = '';
+            currentSetupKeyboardLang = lang; 
+            const keys = lang === 'ar' ? arabicPureKeys : englishPureKeys;
+            keys.forEach(rowKeys => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
+                rowKeys.forEach(key => {
+                    const keyButton = document.createElement('button');
+                    keyButton.className = 'key';
+                    if (lang === 'en') keyButton.classList.add('lang-en');
+                    if (key.toLowerCase() === 'مسح' || key.toLowerCase() === 'backspace') {
+                        keyButton.classList.add('special');
+                        keyButton.innerHTML = lang === 'ar' ? 'مسح <i class="bi bi-backspace ml-1"></i>' : 'Del <i class="bi bi-backspace ml-1"></i>';
+                        keyButton.onclick = handleSetupKeyboardBackspace;
+                    } else {
+                        keyButton.textContent = key;
+                        keyButton.onclick = () => handleSetupKeyboardLetter(key);
+                    }
+                    rowDiv.appendChild(keyButton);
+                });
+                setupKeyboardArea.appendChild(rowDiv);
+            });
+        }
+
+        function handleSetupKeyboardLetter(char) {
+            manualSecretWordInput.value += char;
+            manualSecretWordInput.dispatchEvent(new Event('input')); 
+        }
+
+        function handleSetupKeyboardBackspace() {
+            manualSecretWordInput.value = manualSecretWordInput.value.slice(0, -1);
+            manualSecretWordInput.dispatchEvent(new Event('input')); 
+        }
+
+        function updateKeyboardKeyColors() { 
             keyboardArea.querySelectorAll('.key').forEach(keyButton => {
                 const keyLetter = keyButton.dataset.key; 
                 if (keyLetter && letterStates[keyLetter]) {
@@ -1004,10 +1117,9 @@
             });
         }
 
-        function renderKeyboard(lang) {
+        function renderGameKeyboard(lang) { 
             keyboardArea.innerHTML = ''; 
-            const keys = lang === 'ar' ? arabicKeys : englishKeys;
-
+            const keys = lang === 'ar' ? gameArabicKeys : gameEnglishKeys;
             keys.forEach(rowKeys => {
                 const rowDiv = document.createElement('div');
                 rowDiv.className = 'keyboard-row';
@@ -1016,29 +1128,89 @@
                     keyButton.className = 'key';
                     if (lang === 'en') keyButton.classList.add('lang-en'); 
                     keyButton.dataset.key = key.toLowerCase(); 
-
-
                     if (key.toLowerCase() === 'مسح' || key.toLowerCase() === 'backspace') {
                         keyButton.classList.add('special');
-                        keyButton.innerHTML = lang === 'ar' ? 'مسح <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="inline ml-1"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.12c.36.53.9.88 1.59.88h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3.71 13.29a.9959.9959 0 01-1.41 0L14 13.41l-2.88 2.88a.9959.9959 0 01-1.41 0L8.29 14.7a.9959.9959 0 010-1.41L11.17 12l-2.88-2.88a.9959.9959 0 010-1.41L9.7 6.29c.39-.39 1.02-.39 1.41 0L14 9.17l2.88-2.88c.39-.39 1.02-.39 1.41 0l1.41 1.41c.39.39.39 1.02 0 1.41L16.83 12l2.88 2.88c.38.39.38 1.03 0 1.41l-1.42 1.41z"/></svg>' : 
-                                                        'Del <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="inline ml-1"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.12c.36.53.9.88 1.59.88h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3.71 13.29a.9959.9959 0 01-1.41 0L14 13.41l-2.88 2.88a.9959.9959 0 01-1.41 0L8.29 14.7a.9959.9959 0 010-1.41L11.17 12l-2.88-2.88a.9959.9959 0 010-1.41L9.7 6.29c.39-.39 1.02-.39 1.41 0L14 9.17l2.88-2.88c.39-.39 1.02-.39 1.41 0l1.41 1.41c.39.39.39 1.02 0 1.41L16.83 12l2.88 2.88c.38.39.38 1.03 0 1.41l-1.42 1.41z"/></svg>';
-                        keyButton.onclick = handleVirtualKeyboardBackspace;
+                        keyButton.innerHTML = lang === 'ar' ? 'مسح <i class="bi bi-backspace ml-1"></i>' : 'Del <i class="bi bi-backspace ml-1"></i>';
+                        keyButton.onclick = handleVirtualKeyboardBackspace; 
                          delete keyButton.dataset.key; 
                     } else if (key.toLowerCase() === 'إدخال' || key.toLowerCase() === 'enter') {
                         keyButton.classList.add('special');
-                         keyButton.innerHTML = lang === 'ar' ? 'إدخال <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="inline mr-1"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-4 10h-4v4h-2v-4H5v-2h4V7h2v4h4v2z"/></svg>' : 
-                                                         'Enter <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" class="inline mr-1"><path d="M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-4 10h-4v4h-2v-4H5v-2h4V7h2v4h4v2z"/></svg>';
+                         keyButton.innerHTML = lang === 'ar' ? 'إدخال <i class="bi bi-check2-circle mr-1"></i>' : 'Enter <i class="bi bi-check2-circle mr-1"></i>';
                         keyButton.onclick = handleGuess;
                          delete keyButton.dataset.key; 
                     } else {
                         keyButton.textContent = key; 
-                        keyButton.onclick = () => handleVirtualKeyboardLetter(key);
+                        keyButton.onclick = () => handleVirtualKeyboardLetter(key); 
                     }
                     rowDiv.appendChild(keyButton);
                 });
                 keyboardArea.appendChild(rowDiv);
             });
         }
+        
+        organizerModeBtn.addEventListener('click', () => switchMode('organizer'));
+        robotModeBtn.addEventListener('click', () => switchMode('robot'));
+        manualInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('manual'));
+        robotInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('robot'));
+        startManualGameButton.addEventListener('click', () => initGame('manual'));
+        startRandomGameButton.addEventListener('click', () => initGame('random')); 
+        submitGuessButton.addEventListener('click', handleGuess);
+        playAgainButton.addEventListener('click', resetGame);
+        
+        manualSecretWordInput.addEventListener('input', () => {
+            updateManualWordPreview();
+            if (toggleSetupKeyboardCheckbox.checked) {
+                const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
+                if (lang !== 'mixed' && lang !== currentSetupKeyboardLang) { 
+                    renderSetupKeyboard(lang);
+                } else if (setupKeyboardArea.innerHTML === '') { 
+                     renderSetupKeyboard(lang === 'mixed' ? currentSetupKeyboardLang : lang);
+                }
+            }
+        });
+        manualSecretWordInput.addEventListener('focus', () => {
+            // If setup keyboard is enabled, ensure it's rendered.
+            // Also, set readOnly based on the checkbox.
+            manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
+            if (toggleSetupKeyboardCheckbox.checked && setupKeyboardArea.innerHTML === '') {
+                 const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
+                 renderSetupKeyboard(lang === 'mixed' ? currentSetupKeyboardLang : lang);
+            }
+        });
+         manualSecretWordInput.addEventListener('blur', () => {
+            // Optional: if you want to keep it readonly even on blur if kbd is active
+            // manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
+        });
+
+
+        robotLangSwitch.querySelectorAll('button').forEach(button => {
+            button.addEventListener('click', () => {
+                robotLangSwitch.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+            });
+        });
+
+        toggleSetupKeyboardCheckbox.addEventListener('change', () => {
+            const isChecked = toggleSetupKeyboardCheckbox.checked;
+            setupKeyboardArea.classList.toggle('hidden', !isChecked);
+            manualSecretWordInput.readOnly = isChecked; // Set readonly based on checkbox
+            if (isChecked) {
+                const lang = detectLanguage(manualSecretWordInput.value) || 'ar'; 
+                renderSetupKeyboard(lang === 'mixed' ? 'ar' : lang); 
+                if(!manualSecretWordInput.readOnly) { // If it became writable, focus it
+                     // manualSecretWordInput.focus(); // Focus might be annoying if user is clicking checkbox
+                }
+            } else {
+                 manualSecretWordInput.focus(); // If kbd hidden, make sure input is focusable
+            }
+        });
+
+        toggleKeyboardCheckbox.addEventListener('change', () => { 
+            isVirtualKeyboardActive = toggleKeyboardCheckbox.checked;
+            keyboardArea.classList.toggle('hidden', !isVirtualKeyboardActive);
+            updateLetterInputsState(); 
+            updateNextInputHighlight(); 
+        });
 
         document.addEventListener('DOMContentLoaded', () => {
             setRainbowGradientBackground(); 
@@ -1047,8 +1219,10 @@
             updateManualWordPreview(); 
             loadWordList(); 
             manualAttemptsInput.value = '25'; 
+            toggleSetupKeyboardCheckbox.checked = false; 
+            setupKeyboardArea.classList.add('hidden');
+            manualSecretWordInput.readOnly = false; // Initially not readonly
         });
     </script>
 </body>
 </html>
-
