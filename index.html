@@ -592,7 +592,6 @@
         let isVirtualKeyboardActive = true; 
         let currentSetupKeyboardLang = 'ar'; // Default language for setup keyboard
 
-        // --- Keyboard Layouts ---
         const arabicPureKeys = [ 
             ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'خ', 'ح', 'ج', 'د'],
             ['ش', 'س', 'ي', 'ب', 'ل', 'ا', 'ت', 'ن', 'م', 'ك', 'ط'],
@@ -605,6 +604,7 @@
             ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
             ['Backspace'] 
         ];
+
         const gameArabicKeys = [ 
             ['ض', 'ص', 'ث', 'ق', 'ف', 'غ', 'ع', 'ه', 'و'],
             ['خ', 'ح', 'ج', 'د', 'ش', 'س', 'ي', 'ب', 'ز'],
@@ -618,74 +618,10 @@
             ['z', 'x', 'c', 'v', 'b', 'n', 'm'],
             ['Backspace', 'Enter']
         ];
+
         const validArabicChars = arabicPureKeys.flat().filter(k => k.length === 1 && k !== 'لا' && k !== 'ى');
         const validEnglishChars = englishPureKeys.flat().filter(k => k.length === 1);
 
-        // --- Settings Management (localStorage) ---
-        function saveSettings() {
-            try {
-                const settings = {
-                    isGameKeyboardVisible: toggleKeyboardCheckbox.checked,
-                    isSetupKeyboardVisible: toggleSetupKeyboardCheckbox.checked,
-                    activeMode: organizerModeBtn.classList.contains('active') ? 'organizer' : 'robot',
-                    robotLang: getSelectedRobotLang(),
-                    isManualInfinite: manualInfiniteAttemptsCheckbox.checked,
-                    isRobotInfinite: robotInfiniteAttemptsCheckbox.checked,
-                };
-                localStorage.setItem('wordGameSettings', JSON.stringify(settings));
-            } catch (e) {
-                console.error("Could not save settings to localStorage.", e);
-            }
-        }
-
-        function loadSettings() {
-            try {
-                const savedSettings = localStorage.getItem('wordGameSettings');
-                if (savedSettings) {
-                    const settings = JSON.parse(savedSettings);
-
-                    // Apply settings, using defaults (??) if a setting is missing from localStorage
-                    isVirtualKeyboardActive = settings.isGameKeyboardVisible ?? true;
-                    toggleKeyboardCheckbox.checked = isVirtualKeyboardActive;
-                    keyboardArea.classList.toggle('hidden', !isVirtualKeyboardActive);
-                    
-                    toggleSetupKeyboardCheckbox.checked = settings.isSetupKeyboardVisible ?? false;
-                    
-                    manualInfiniteAttemptsCheckbox.checked = settings.isManualInfinite ?? false;
-                    toggleInfiniteAttempts('manual'); // This updates the UI correctly
-
-                    robotInfiniteAttemptsCheckbox.checked = settings.isRobotInfinite ?? false;
-                    toggleInfiniteAttempts('robot'); // This updates the UI correctly
-
-                    if (settings.robotLang) {
-                        robotLangSwitch.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
-                        const langBtn = robotLangSwitch.querySelector(`button[data-lang="${settings.robotLang}"]`);
-                        if (langBtn) {
-                             langBtn.classList.add('active');
-                        } else { // Fallback if language from storage is invalid
-                            robotLangSwitch.querySelector('button[data-lang="ar"]').classList.add('active');
-                        }
-                    }
-                    
-                    // This should be one of the last things to run as it triggers other UI changes
-                    switchMode(settings.activeMode || 'organizer');
-                } else {
-                    // If no settings, run with defaults, same as original DOMContentLoaded
-                    switchMode('organizer');
-                    manualAttemptsInput.value = '25'; 
-                    toggleSetupKeyboardCheckbox.checked = false; 
-                    setupKeyboardArea.classList.add('hidden');
-                    if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
-                    manualSecretWordInput.readOnly = false;
-                }
-            } catch (e) {
-                console.error("Could not load settings from localStorage. Using defaults.", e);
-                // In case of error, just use the default startup
-                switchMode('organizer');
-            }
-        }
-
-        // --- Core Functions ---
         function setRainbowGradientBackground() {
             const colors = ['#FF4E50', '#FC913A', '#F9D423', '#EDE574', '#E1F5C4', '#ADD8E6', '#8A2BE2', '#FF00FF', '#00FFFF'];
             let shuffledColors = colors.sort(() => 0.5 - Math.random());
@@ -699,6 +635,8 @@
                 loadingMessage.classList.remove('hidden');
                 startRandomGameButton.disabled = true;
                 await new Promise(resolve => setTimeout(resolve, 500)); 
+                // In a real application, you would fetch this from a server or a local JSON file.
+                // For this example, the list is hardcoded.
                 wordList = [
                     {"lang": "ar", "word": "كتاب", "attempts": 6}, {"lang": "ar", "word": "قلم", "attempts": 5},
                     {"lang": "ar", "word": "مدرسة", "attempts": 7}, {"lang": "ar", "word": "شمس", "attempts": 5},
@@ -751,18 +689,16 @@
                 manualSecretWordInput.focus();
                 updateManualWordPreview(); 
                 setupMessageArea.textContent = '';
-                // Update setup keyboard visibility based on the checkbox state
-                const showSetupKeyboard = toggleSetupKeyboardCheckbox.checked;
-                manualSecretWordInput.readOnly = showSetupKeyboard;
-                setupKeyboardArea.classList.toggle('hidden', !showSetupKeyboard);
-                if (showSetupKeyboard) {
+                // Update setup keyboard based on current input and checkbox state
+                manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
+                if (toggleSetupKeyboardCheckbox.checked) {
                     const lang = detectLanguage(manualSecretWordInput.value) || currentSetupKeyboardLang;
                     renderSetupKeyboard(lang);
-                    if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
                 } else {
-                    if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
+                    setupKeyboardArea.classList.add('hidden');
+                     if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
                 }
-            } else { // Robot mode
+            } else { 
                 robotModeBtn.classList.add('active');
                 organizerModeBtn.classList.remove('active');
                 robotSettings.classList.remove('hidden');
@@ -790,19 +726,15 @@
                 manualAttemptsInput.disabled = isInfiniteAttempts;
                 if (isInfiniteAttempts) {
                     manualAttemptsInput.value = ''; 
-                    if (document.activeElement === manualInfiniteAttemptsCheckbox) {
-                        showConfirmation(manualInfiniteConfirm, "المحاولات الآن لا نهائية!");
-                    }
+                    showConfirmation(manualInfiniteConfirm, "المحاولات الآن لا نهائية!");
                 } else {
                     manualAttemptsInput.value = '25'; 
                     manualInfiniteConfirm.textContent = ''; 
                 }
-            } else { // Robot mode
+            } else { 
                 isInfiniteAttempts = robotInfiniteAttemptsCheckbox.checked;
                 if (isInfiniteAttempts) {
-                     if (document.activeElement === robotInfiniteAttemptsCheckbox) {
-                        showConfirmation(robotInfiniteConfirm, "المحاولات الآن لا نهائية!");
-                     }
+                    showConfirmation(robotInfiniteConfirm, "المحاولات الآن لا نهائية!");
                 } else {
                     robotInfiniteConfirm.textContent = ''; 
                 }
@@ -851,7 +783,7 @@
                         showMessage("طور يدوي: عدد محاولات غير صحيح.", true, true); return;
                     }
                 } else { attempts = Infinity; } 
-            } else { // Robot mode
+            } else { 
                 isVirtualKeyboardActive = true; 
                 if (wordList.length === 0) {
                     showMessage("قائمة كلمات الكرّاس لم تحمل أو فارغة. لا يمكن بدء اللعبة.", true, true); return;
@@ -890,8 +822,7 @@
             
             createLetterDisplayElements(); 
             
-            // Restore game keyboard visibility from saved settings
-            isVirtualKeyboardActive = toggleKeyboardCheckbox.checked;
+            toggleKeyboardCheckbox.checked = isVirtualKeyboardActive; 
             keyboardArea.classList.toggle('hidden', !isVirtualKeyboardActive);
             updateLetterInputsState(); 
             
@@ -908,12 +839,28 @@
             gameScreen.classList.add('hidden');
             setupScreen.classList.remove('hidden');
             
-            // reload settings to restore user's preferred setup state
-            loadSettings(); 
-            
+            switchMode('organizer'); 
             manualSecretWordInput.value = '';
+            manualSecretWordInput.readOnly = false; 
             updateManualWordPreview(); 
+            manualAttemptsInput.value = '25'; 
+            manualAttemptsInput.disabled = false;
+            manualInfiniteAttemptsCheckbox.checked = false;
+            toggleSetupKeyboardCheckbox.checked = false; 
+            setupKeyboardArea.classList.add('hidden');
+            if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
+            currentSetupKeyboardLang = 'ar'; // Reset setup keyboard language
+
+            manualInfiniteConfirm.textContent = ''; 
             
+            robotInfiniteAttemptsCheckbox.checked = false;
+            robotInfiniteConfirm.textContent = ''; 
+            isInfiniteAttempts = false;
+
+            robotLangSwitch.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
+            robotLangSwitch.querySelector('button[data-lang="ar"]').classList.add('active');
+
+            manualSecretWordInput.focus(); 
             guessGrid.innerHTML = ''; 
             letterInputArea.innerHTML = ''; 
             letterDisplayElements = [];
@@ -921,11 +868,16 @@
             letterStates = {}; 
             gameActive = false; 
             submitGuessButton.disabled = false; 
+            attemptsInfoDisplay.classList.remove('hidden'); 
+            
+            isVirtualKeyboardActive = true; 
+            toggleKeyboardCheckbox.checked = true;
+            keyboardArea.classList.remove('hidden');
+            keyboardArea.innerHTML = ''; 
             
             keyboardArea.classList.remove('opacity-50', 'pointer-events-none'); 
             setRainbowGradientBackground(); 
             setupMessageArea.textContent = ''; 
-            messageArea.textContent = '';
         }
 
         function createLetterDisplayElements() {
@@ -1180,20 +1132,27 @@
         function toggleSetupKeyboardLanguage(lang) {
             currentSetupKeyboardLang = lang;
             renderSetupKeyboard(currentSetupKeyboardLang);
+            // Optional: If you want to clear the input when language changes
+            // manualSecretWordInput.value = '';
+            // updateManualWordPreview();
             manualSecretWordInput.focus();
         }
 
 
         function renderSetupKeyboard(lang) {
+            // Clear only keyboard rows, not the toggle
             const existingRows = setupKeyboardArea.querySelectorAll('.keyboard-row');
             existingRows.forEach(row => row.remove());
 
+            // Ensure lang toggle is present and at the top
             if (!setupKeyboardLangToggleContainer || !setupKeyboardArea.contains(setupKeyboardLangToggleContainer)) {
                 setupKeyboardLangToggleContainer = createSetupKeyboardLangToggle();
-                setupKeyboardArea.prepend(setupKeyboardLangToggleContainer);
+                setupKeyboardArea.prepend(setupKeyboardLangToggleContainer); // Prepend to keep it on top
             }
             setupKeyboardLangToggleContainer.classList.remove('hidden');
 
+
+            // Update active state of toggle buttons
             const toggleButtons = setupKeyboardLangToggleContainer.querySelectorAll('.switch button');
             toggleButtons.forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -1218,7 +1177,7 @@
                     }
                     rowDiv.appendChild(keyButton);
                 });
-                setupKeyboardArea.appendChild(rowDiv); 
+                setupKeyboardArea.appendChild(rowDiv); // Append rows after the toggle
             });
         }
 
@@ -1278,13 +1237,11 @@
             });
         }
         
-        // --- Event Listeners ---
-        organizerModeBtn.addEventListener('click', () => { switchMode('organizer'); saveSettings(); });
-        robotModeBtn.addEventListener('click', () => { switchMode('robot'); saveSettings(); });
-
-        manualInfiniteAttemptsCheckbox.addEventListener('change', () => { toggleInfiniteAttempts('manual'); saveSettings(); });
-        robotInfiniteAttemptsCheckbox.addEventListener('change', () => { toggleInfiniteAttempts('robot'); saveSettings(); });
-        
+        // Event Listeners
+        organizerModeBtn.addEventListener('click', () => switchMode('organizer'));
+        robotModeBtn.addEventListener('click', () => switchMode('robot'));
+        manualInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('manual'));
+        robotInfiniteAttemptsCheckbox.addEventListener('change', () => toggleInfiniteAttempts('robot'));
         startManualGameButton.addEventListener('click', () => initGame('manual'));
         startRandomGameButton.addEventListener('click', () => initGame('random')); 
         submitGuessButton.addEventListener('click', handleGuess);
@@ -1299,24 +1256,30 @@
                 setTimeout(() => showMessage("", false, true), 2000); 
             }
             updateManualWordPreview();
+            // No automatic language switching for setup keyboard based on input here.
+            // Language is now controlled by the dedicated toggle.
         });
+
 
         manualSecretWordInput.addEventListener('focus', () => {
             manualSecretWordInput.readOnly = toggleSetupKeyboardCheckbox.checked;
             if (toggleSetupKeyboardCheckbox.checked && setupKeyboardArea.classList.contains('hidden')) {
+                 // This case should ideally not happen if checkbox is checked, keyboard should be visible.
+                 // But as a fallback, ensure it's rendered.
                  renderSetupKeyboard(currentSetupKeyboardLang);
                  setupKeyboardArea.classList.remove('hidden');
                  if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
             } else if (toggleSetupKeyboardCheckbox.checked && !setupKeyboardArea.classList.contains('hidden')) {
+                // If keyboard is already visible, ensure toggle is also visible
                 if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
             }
         });
+
 
         robotLangSwitch.querySelectorAll('button').forEach(button => {
             button.addEventListener('click', () => {
                 robotLangSwitch.querySelectorAll('button').forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
-                saveSettings(); // Save setting on language change
             });
         });
 
@@ -1325,35 +1288,42 @@
             setupKeyboardArea.classList.toggle('hidden', !isChecked);
             manualSecretWordInput.readOnly = isChecked; 
             if (isChecked) {
+                // Determine initial language for setup keyboard.
+                // If input has content, try to detect. Otherwise, use currentSetupKeyboardLang (default 'ar').
                 const detectedLangForKeyboard = detectLanguage(manualSecretWordInput.value);
-                let langToRender = currentSetupKeyboardLang; 
-                if (detectedLangForKeyboard !== 'mixed' && detectedLangForKeyboard !== 'mixed_with_number' && detectedLangForKeyboard !== 'unknown') {
+                let langToRender = currentSetupKeyboardLang; // Default
+                if (detectLanguage !== 'mixed' && detectedLangForKeyboard !== 'mixed_with_number' && detectedLangForKeyboard !== 'unknown') {
                     langToRender = detectedLangForKeyboard;
                 }
-                renderSetupKeyboard(langToRende
-                if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
+                renderSetupKeyboard(langToRender); 
+                 if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.remove('hidden');
             } else {
                  manualSecretWordInput.focus(); 
                  if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
             }
-            saveSettings(); // Save setting on change
         });
 
         toggleKeyboardCheckbox.addEventListener('change', () => { 
             isVirtualKeyboardActive = toggleKeyboardCheckbox.checked;
             keyboardArea.classList.toggle('hidden', !isVirtualKeyboardActive);
             updateLetterInputsState(); 
-            updateNextInputHighlight();
-            saveSettings(); // Save setting on change
+            updateNextInputHighlight(); 
         });
 
-        // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
             setRainbowGradientBackground(); 
-            loadWordList();
-            loadSettings(); // Load user's saved preferences
+            switchMode('organizer'); 
+            manualSecretWordInput.focus();
+            updateManualWordPreview(); 
+            loadWordList(); 
+            manualAttemptsInput.value = '25'; 
+            toggleSetupKeyboardCheckbox.checked = false; 
+            setupKeyboardArea.classList.add('hidden');
+            if(setupKeyboardLangToggleContainer) setupKeyboardLangToggleContainer.classList.add('hidden');
+            manualSecretWordInput.readOnly = false; 
         });
     </script>
 </body>
 </html>
 
+ابيك تخلي اذا كتبت الكلمة او بالمحاولة تتحقق انها صحيحة لغويا وتكون بسرعة غير ملحوظه + في قسم كمبيوتر سوي مربع تختار عدد حروف
