@@ -66,7 +66,6 @@
             text-align: center; font-size: 1rem; transition: 0.2s;
         }
 
-        /* الحالات الخاصة بلوحة المفاتيح */
         .correct { background: var(--feedback-green) !important; color: white; }
         .present { background: var(--feedback-yellow) !important; color: white; }
         .absent { 
@@ -100,8 +99,8 @@
                     <input type="password" id="secret-input" class="w-full p-3 border-2 border-main rounded-md bg-white/50" placeholder="...">
                 </div>
                 <div>
-                    <label id="txt-label-att" class="block font-bold mb-1">عدد المحاولات:</label>
-                    <input type="number" id="attempts-input" value="6" min="1" max="15" class="w-full p-3 border-2 border-main rounded-md bg-white/50">
+                    <label id="txt-label-att" class="block font-bold mb-1">عدد المحاولات (0 للمالا نهاية):</label>
+                    <input type="number" id="attempts-input" value="6" min="0" max="20" class="w-full p-3 border-2 border-main rounded-md bg-white/50">
                 </div>
             </div>
 
@@ -130,15 +129,17 @@
     <script>
         const translations = {
             ar: {
-                title: "ابحث على الكلمة", m: "يدوي", r: "تلقائي", labelWord: "الكلمة السرية:", labelAtt: "عدد المحاولات:",
+                title: "ابحث على الكلمة", m: "يدوي", r: "تلقائي", labelWord: "الكلمة السرية:", labelAtt: "عدد المحاولات (0 للانهائية):",
                 robotDesc: "سأختار لك كلمة عشوائية!", btnStart: "بدء اللعب", btnGuess: "تحقق",
-                tries: "المحاولات المتبقية: ", win: "مبروك فزت! 🎉", lose: "للأسف خسرت! الكلمة كانت: ",
+                tries: "المحاولات المتبقية: ", infinite: "وضع المحاولات اللانهائية ♾️", currentTry: "المحاولة رقم: ",
+                win: "مبروك فزت! 🎉", lose: "للأسف خسرت! الكلمة كانت: ",
                 dir: "rtl", font: "font-ar"
             },
             en: {
-                title: "Word Finder", m: "Manual", r: "AI Mode", labelWord: "Secret Word:", labelAtt: "Max Attempts:",
+                title: "Word Finder", m: "Manual", r: "AI Mode", labelWord: "Secret Word:", labelAtt: "Attempts (0 for infinite):",
                 robotDesc: "I'll pick a word for you!", btnStart: "Start Game", btnGuess: "Check",
-                tries: "Tries left: ", win: "You Won! 🎉", lose: "Game Over! Word was: ",
+                tries: "Tries left: ", infinite: "Infinite Mode ♾️", currentTry: "Attempt number: ",
+                win: "You Won! 🎉", lose: "Game Over! Word was: ",
                 dir: "ltr", font: "font-en"
             }
         };
@@ -151,9 +152,6 @@
         let guesses = [];
         let currentGuess = [];
         let letterStates = {};
-
-        const keysAR = [["ض","ص","ث","ق","ف","غ","ع","ه","خ","ح","ج","د"], ["ش","س","ي","ب","ل","ا","ت","ن","م","ك","ط"], ["ئ","ء","ؤ","ر","ى","ة","و","ز","ظ","ذ","مسح"]];
-        const keysEN = [["Q","W","E","R","T","Y","U","I","O","P"], ["A","S","D","F","G","H","J","K","L"], ["Z","X","C","V","B","N","M","DEL"]];
 
         function setUILang(l) {
             currentUI = l;
@@ -191,14 +189,20 @@
         }
 
         function updateTriesDisplay() {
-            const left = maxTries - guesses.length;
-            document.getElementById('txt-tries-left').textContent = translations[currentUI].tries + left;
+            const t = translations[currentUI];
+            if (maxTries === 0) {
+                document.getElementById('txt-tries-left').textContent = t.infinite + " | " + t.currentTry + (guesses.length + 1);
+            } else {
+                const left = maxTries - guesses.length;
+                document.getElementById('txt-tries-left').textContent = t.tries + left;
+            }
         }
 
         function startGame() {
             if (currentMode === 'manual') {
                 secretWord = document.getElementById('secret-input').value.toLowerCase().trim();
-                maxTries = parseInt(document.getElementById('attempts-input').value) || 6;
+                maxTries = parseInt(document.getElementById('attempts-input').value);
+                if (isNaN(maxTries)) maxTries = 6;
             } else {
                 const listAR = ["كتاب", "سماء", "نور", "تفاح", "قلم", "مدرسة", "بحر"];
                 const listEN = ["apple", "bread", "cloud", "dance", "earth", "world", "house"];
@@ -231,7 +235,7 @@
         function renderKeyboard(isEn) {
             const kb = document.getElementById('keyboard');
             kb.innerHTML = '';
-            const layout = isEn ? keysEN : keysAR;
+            const layout = isEn ? [["Q","W","E","R","T","Y","U","I","O","P"], ["A","S","D","F","G","H","J","K","L"], ["Z","X","C","V","B","N","M","DEL"]] : [["ض","ص","ث","ق","ف","غ","ع","ه","خ","ح","ج","د"], ["ش","س","ي","ب","ل","ا","ت","ن","م","ك","ط"], ["ئ","ء","ؤ","ر","ى","ة","و","ز","ظ","ذ","مسح"]];
             layout.forEach(row => {
                 const rDiv = document.createElement('div');
                 rDiv.className = "flex w-full justify-center";
@@ -240,13 +244,9 @@
                     const charStatus = letterStates[k.toLowerCase()];
                     btn.className = `keyboard-key ${isEn ? 'font-en' : 'font-ar'}`;
                     if(charStatus) btn.classList.add(charStatus);
-                    
                     btn.textContent = k;
-                    
-                    // منع الضغط إذا كان الحرف غير موجود
                     btn.onclick = () => {
-                        if (charStatus === 'absent') return; // لا يفعل شيء
-                        
+                        if (charStatus === 'absent') return;
                         if (k === 'DEL' || k === 'مسح') {
                             const idx = currentGuess.findLastIndex(c => c !== "");
                             if (idx !== -1) { currentGuess[idx] = ""; document.getElementById(`box-${idx}`).textContent = ""; }
@@ -287,7 +287,7 @@
             if (guessStr === secretWord) {
                 alert(translations[currentUI].win);
                 location.reload();
-            } else if (guesses.length >= maxTries) {
+            } else if (maxTries !== 0 && guesses.length >= maxTries) {
                 alert(translations[currentUI].lose + secretWord.toUpperCase());
                 location.reload();
             }
@@ -311,9 +311,10 @@
                 });
                 container.appendChild(r);
             });
+            container.scrollTop = container.scrollHeight;
         }
 
-        setUILang('ar'); // البدء بالعربية
+        setUILang('ar');
     </script>
 </body>
 </html>
