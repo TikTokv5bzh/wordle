@@ -51,10 +51,7 @@
             width: 100%; cursor: pointer; border-bottom: 4px solid #4b250a;
             transition: all 0.1s; text-align: center;
         }
-        .sketch-button:active { transform: translateY(2px); border-bottom-width: 2px; }
 
-        .active-btn { background: #8b4513 !important; color: white !important; }
-        
         .letter-box {
             width: 42px; height: 48px; border: 2px solid var(--border-main);
             display: flex; justify-content: center; align-items: center;
@@ -66,12 +63,19 @@
             background: #eaddc5; border: 1px solid var(--border-main);
             border-radius: 5px; padding: 12px 4px; margin: 2px;
             min-width: 32px; cursor: pointer; font-weight: bold; flex: 1;
-            text-align: center; font-size: 1rem;
+            text-align: center; font-size: 1rem; transition: 0.2s;
         }
 
+        /* الحالات الخاصة بلوحة المفاتيح */
         .correct { background: var(--feedback-green) !important; color: white; }
         .present { background: var(--feedback-yellow) !important; color: white; }
-        .absent { background: var(--feedback-gray) !important; color: white; opacity: 0.6; }
+        .absent { 
+            background: var(--feedback-gray) !important; 
+            color: rgba(255,255,255,0.5); 
+            opacity: 0.4; 
+            cursor: not-allowed !important; 
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body class="font-ar" id="body-tag">
@@ -86,19 +90,25 @@
             <h1 id="txt-title" class="text-3xl font-bold text-center border-b-2 border-dashed border-main pb-2">ابحث على الكلمة</h1>
             
             <div class="flex gap-2">
-                <button id="mode-m" onclick="setMode('manual')" class="flex-1 p-3 rounded-lg border-2 border-main active-btn font-bold">✍️ <span id="txt-m">يدوي</span></button>
+                <button id="mode-m" onclick="setMode('manual')" class="flex-1 p-3 rounded-lg border-2 border-main bg-white font-bold">✍️ <span id="txt-m">يدوي</span></button>
                 <button id="mode-r" onclick="setMode('robot')" class="flex-1 p-3 rounded-lg border-2 border-main bg-white font-bold">🤖 <span id="txt-r">تلقائي</span></button>
             </div>
 
             <div id="manual-settings" class="space-y-4">
-                <label id="txt-label-word" class="block font-bold">الكلمة السرية:</label>
-                <input type="password" id="secret-input" class="w-full p-3 border-2 border-main rounded-md bg-white/50" placeholder="...">
+                <div>
+                    <label id="txt-label-word" class="block font-bold mb-1">الكلمة السرية:</label>
+                    <input type="password" id="secret-input" class="w-full p-3 border-2 border-main rounded-md bg-white/50" placeholder="...">
+                </div>
+                <div>
+                    <label id="txt-label-att" class="block font-bold mb-1">عدد المحاولات:</label>
+                    <input type="number" id="attempts-input" value="6" min="1" max="15" class="w-full p-3 border-2 border-main rounded-md bg-white/50">
+                </div>
             </div>
 
             <div id="robot-settings" class="hidden text-center space-y-4">
                 <p id="txt-robot-desc" class="font-bold">سأختار لك كلمة عشوائية!</p>
                 <div class="flex justify-center gap-4">
-                    <button id="rl-ar" onclick="setRobotLang('ar')" class="px-6 py-2 rounded-full border-2 border-main active-btn font-bold">العربية</button>
+                    <button id="rl-ar" onclick="setRobotLang('ar')" class="px-6 py-2 rounded-full border-2 border-main bg-white font-bold">العربية</button>
                     <button id="rl-en" onclick="setRobotLang('en')" class="px-6 py-2 rounded-full border-2 border-main bg-white font-bold">English</button>
                 </div>
             </div>
@@ -107,6 +117,9 @@
         </div>
 
         <div id="game-screen" class="hidden space-y-4">
+            <div class="text-center">
+                <p id="txt-tries-left" class="text-lg font-bold text-red-700"></p>
+            </div>
             <div id="grid-container" class="space-y-2 max-h-64 overflow-y-auto"></div>
             <div id="input-row" class="flex justify-center gap-1 my-6"></div>
             <button onclick="submitGuess()" id="txt-btn-guess" class="sketch-button">تحقق</button>
@@ -117,13 +130,15 @@
     <script>
         const translations = {
             ar: {
-                title: "ابحث على الكلمة", m: "يدوي", r: "تلقائي", labelWord: "الكلمة السرية:",
-                robotDesc: "سأختار لك كلمة عشوائية!", btnStart: "بدء اللعب", btnGuess: "تحقق من الكلمة",
+                title: "ابحث على الكلمة", m: "يدوي", r: "تلقائي", labelWord: "الكلمة السرية:", labelAtt: "عدد المحاولات:",
+                robotDesc: "سأختار لك كلمة عشوائية!", btnStart: "بدء اللعب", btnGuess: "تحقق",
+                tries: "المحاولات المتبقية: ", win: "مبروك فزت! 🎉", lose: "للأسف خسرت! الكلمة كانت: ",
                 dir: "rtl", font: "font-ar"
             },
             en: {
-                title: "Word Finder", m: "Manual", r: "AI Mode", labelWord: "Secret Word:",
-                robotDesc: "I'll pick a word for you!", btnStart: "Start Game", btnGuess: "Submit",
+                title: "Word Finder", m: "Manual", r: "AI Mode", labelWord: "Secret Word:", labelAtt: "Max Attempts:",
+                robotDesc: "I'll pick a word for you!", btnStart: "Start Game", btnGuess: "Check",
+                tries: "Tries left: ", win: "You Won! 🎉", lose: "Game Over! Word was: ",
                 dir: "ltr", font: "font-en"
             }
         };
@@ -132,6 +147,7 @@
         let currentMode = 'manual';
         let robotLang = 'ar';
         let secretWord = '';
+        let maxTries = 6;
         let guesses = [];
         let currentGuess = [];
         let letterStates = {};
@@ -144,49 +160,60 @@
             const t = translations[l];
             document.getElementById('body-tag').className = t.font;
             document.getElementById('body-tag').dir = t.dir;
-            document.getElementById('ui-ar').classList.toggle('border-main', l === 'ar');
-            document.getElementById('ui-en').classList.toggle('border-main', l === 'en');
+            document.getElementById('ui-ar').classList.toggle('bg-amber-700', l === 'ar');
+            document.getElementById('ui-ar').classList.toggle('text-white', l === 'ar');
+            document.getElementById('ui-en').classList.toggle('bg-amber-700', l === 'en');
+            document.getElementById('ui-en').classList.toggle('text-white', l === 'en');
             
             document.getElementById('txt-title').textContent = t.title;
             document.getElementById('txt-m').textContent = t.m;
             document.getElementById('txt-r').textContent = t.r;
             document.getElementById('txt-label-word').textContent = t.labelWord;
+            document.getElementById('txt-label-att').textContent = t.labelAtt;
             document.getElementById('txt-robot-desc').textContent = t.robotDesc;
             document.getElementById('txt-btn-start').textContent = t.btnStart;
             document.getElementById('txt-btn-guess').textContent = t.btnGuess;
+            updateTriesDisplay();
         }
 
         function setMode(m) {
             currentMode = m;
             document.getElementById('manual-settings').classList.toggle('hidden', m === 'robot');
             document.getElementById('robot-settings').classList.toggle('hidden', m === 'manual');
-            document.getElementById('mode-m').classList.toggle('active-btn', m === 'manual');
-            document.getElementById('mode-r').classList.toggle('active-btn', m === 'robot');
+            document.getElementById('mode-m').classList.toggle('bg-amber-100', m === 'manual');
+            document.getElementById('mode-r').classList.toggle('bg-amber-100', m === 'robot');
         }
 
         function setRobotLang(l) {
             robotLang = l;
-            document.getElementById('rl-ar').classList.toggle('active-btn', l === 'ar');
-            document.getElementById('rl-en').classList.toggle('active-btn', l === 'en');
+            document.getElementById('rl-ar').classList.toggle('bg-amber-100', l === 'ar');
+            document.getElementById('rl-en').classList.toggle('bg-amber-100', l === 'en');
+        }
+
+        function updateTriesDisplay() {
+            const left = maxTries - guesses.length;
+            document.getElementById('txt-tries-left').textContent = translations[currentUI].tries + left;
         }
 
         function startGame() {
             if (currentMode === 'manual') {
                 secretWord = document.getElementById('secret-input').value.toLowerCase().trim();
+                maxTries = parseInt(document.getElementById('attempts-input').value) || 6;
             } else {
                 const listAR = ["كتاب", "سماء", "نور", "تفاح", "قلم", "مدرسة", "بحر"];
                 const listEN = ["apple", "bread", "cloud", "dance", "earth", "world", "house"];
-                secretWord = (robotLang === 'en' ? listEN : listAR)[Math.floor(Math.random() * 7)];
+                secretWord = (robotLang === 'en' ? listEN : listAR)[Math.floor(Math.random() * listAR.length)];
+                maxTries = 6;
             }
 
             if (!secretWord) return;
-
+            guesses = [];
+            letterStates = {};
             currentGuess = new Array(secretWord.length).fill("");
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
-            
-            const isWordEn = /^[a-zA-Z]+$/.test(secretWord);
-            initGameUI(isWordEn);
+            updateTriesDisplay();
+            initGameUI(/^[a-zA-Z]+$/.test(secretWord));
         }
 
         function initGameUI(isEn) {
@@ -210,11 +237,16 @@
                 rDiv.className = "flex w-full justify-center";
                 row.forEach(k => {
                     const btn = document.createElement('button');
+                    const charStatus = letterStates[k.toLowerCase()];
                     btn.className = `keyboard-key ${isEn ? 'font-en' : 'font-ar'}`;
-                    const s = letterStates[k.toLowerCase()];
-                    if(s) btn.classList.add(s);
+                    if(charStatus) btn.classList.add(charStatus);
+                    
                     btn.textContent = k;
+                    
+                    // منع الضغط إذا كان الحرف غير موجود
                     btn.onclick = () => {
+                        if (charStatus === 'absent') return; // لا يفعل شيء
+                        
                         if (k === 'DEL' || k === 'مسح') {
                             const idx = currentGuess.findLastIndex(c => c !== "");
                             if (idx !== -1) { currentGuess[idx] = ""; document.getElementById(`box-${idx}`).textContent = ""; }
@@ -250,9 +282,15 @@
             guesses.push({ word: guessStr, res });
             renderGrid();
             renderKeyboard(/^[a-zA-Z]+$/.test(secretWord));
+            updateTriesDisplay();
             
-            if (guessStr === secretWord) alert("فزت!");
-            else if (guesses.length >= 6) alert("انتهت المحاولات! الكلمة: " + secretWord);
+            if (guessStr === secretWord) {
+                alert(translations[currentUI].win);
+                location.reload();
+            } else if (guesses.length >= maxTries) {
+                alert(translations[currentUI].lose + secretWord.toUpperCase());
+                location.reload();
+            }
 
             currentGuess.fill("");
             for (let i = 0; i < secretWord.length; i++) document.getElementById(`box-${i}`).textContent = "";
@@ -274,6 +312,8 @@
                 container.appendChild(r);
             });
         }
+
+        setUILang('ar'); // البدء بالعربية
     </script>
 </body>
 </html>
