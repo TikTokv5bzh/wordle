@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Finder | ابحث عن الكلمة</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <style>
         @font-face {
             font-family: 'AA-Galaxy'; 
             src: url('AA-GALAXY.woff2') format('woff2');
             font-weight: normal; font-style: normal;
         }
-
         :root {
             --notebook-bg: #fdf6e3; 
             --border-main: #8b4513; 
@@ -19,7 +19,6 @@
             --feedback-yellow: #DAA520;
             --feedback-gray: #9e8a78;
         }
-
         .font-ar { font-family: 'AA-Galaxy', serif !important; }
         .font-en { font-family: ui-sans-serif, system-ui, sans-serif !important; }
 
@@ -30,13 +29,11 @@
             min-height: 100vh;
             display: flex; flex-direction: column; align-items: center; padding: 20px;
         }
-
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
-
         .app-container {
             background: var(--notebook-bg);
             border: 3px solid var(--border-main);
@@ -44,37 +41,37 @@
             width: 100%; max-width: 450px; padding: 25px;
             box-shadow: 10px 10px 0px rgba(0,0,0,0.2);
         }
-
         .sketch-button {
             background: var(--border-main); color: white;
             padding: 12px; border-radius: 8px; font-weight: bold;
             width: 100%; cursor: pointer; border-bottom: 4px solid #4b250a;
             transition: all 0.1s; text-align: center;
         }
-
         .letter-box {
             width: 42px; height: 48px; border: 2px solid var(--border-main);
             display: flex; justify-content: center; align-items: center;
             font-size: 1.5rem; font-weight: bold; border-radius: 6px;
             background: rgba(255,255,255,0.5);
         }
-
         .keyboard-key {
             background: #eaddc5; border: 1px solid var(--border-main);
             border-radius: 5px; padding: 12px 4px; margin: 2px;
             min-width: 32px; cursor: pointer; font-weight: bold; flex: 1;
             text-align: center; font-size: 1rem; transition: 0.2s;
         }
-
         .correct { background: var(--feedback-green) !important; color: white; }
         .present { background: var(--feedback-yellow) !important; color: white; }
         .absent { 
             background: var(--feedback-gray) !important; 
-            color: rgba(255,255,255,0.5); 
-            opacity: 0.4; 
-            cursor: not-allowed !important; 
-            transform: scale(0.95);
+            color: rgba(255,255,255,0.5); opacity: 0.4; 
+            cursor: not-allowed !important; transform: scale(0.95);
         }
+        .input-wrapper { position: relative; width: 100%; }
+        .toggle-password {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            left: 10px; cursor: pointer; color: var(--border-main); font-size: 1.2rem;
+        }
+        body[dir="ltr"] .toggle-password { left: auto; right: 10px; }
     </style>
 </head>
 <body class="font-ar" id="body-tag">
@@ -96,10 +93,13 @@
             <div id="manual-settings" class="space-y-4">
                 <div>
                     <label id="txt-label-word" class="block font-bold mb-1">الكلمة السرية:</label>
-                    <input type="password" id="secret-input" class="w-full p-3 border-2 border-main rounded-md bg-white/50" placeholder="...">
+                    <div class="input-wrapper">
+                        <input type="password" id="secret-input" autocomplete="new-password" spellcheck="false" class="w-full p-3 border-2 border-main rounded-md bg-white/50" placeholder="...">
+                        <i class="bi bi-eye-slash toggle-password" id="toggleIcon" onclick="toggleVisibility()"></i>
+                    </div>
                 </div>
                 <div>
-                    <label id="txt-label-att" class="block font-bold mb-1">عدد المحاولات (0 للمالا نهاية):</label>
+                    <label id="txt-label-att" class="block font-bold mb-1">عدد المحاولات (0 للانهائية):</label>
                     <input type="number" id="attempts-input" value="6" min="0" max="20" class="w-full p-3 border-2 border-main rounded-md bg-white/50">
                 </div>
             </div>
@@ -116,9 +116,7 @@
         </div>
 
         <div id="game-screen" class="hidden space-y-4">
-            <div class="text-center">
-                <p id="txt-tries-left" class="text-lg font-bold text-red-700"></p>
-            </div>
+            <div class="text-center"><p id="txt-tries-left" class="text-lg font-bold text-red-700"></p></div>
             <div id="grid-container" class="space-y-2 max-h-64 overflow-y-auto"></div>
             <div id="input-row" class="flex justify-center gap-1 my-6"></div>
             <button onclick="submitGuess()" id="txt-btn-guess" class="sketch-button">تحقق</button>
@@ -128,20 +126,8 @@
 
     <script>
         const translations = {
-            ar: {
-                title: "ابحث على الكلمة", m: "يدوي", r: "تلقائي", labelWord: "الكلمة السرية:", labelAtt: "عدد المحاولات (0 للانهائية):",
-                robotDesc: "سأختار لك كلمة عشوائية!", btnStart: "بدء اللعب", btnGuess: "تحقق",
-                tries: "المحاولات المتبقية: ", infinite: "وضع المحاولات اللانهائية ♾️", currentTry: "المحاولة رقم: ",
-                win: "مبروك فزت! 🎉", lose: "للأسف خسرت! الكلمة كانت: ",
-                dir: "rtl", font: "font-ar"
-            },
-            en: {
-                title: "Word Finder", m: "Manual", r: "AI Mode", labelWord: "Secret Word:", labelAtt: "Attempts (0 for infinite):",
-                robotDesc: "I'll pick a word for you!", btnStart: "Start Game", btnGuess: "Check",
-                tries: "Tries left: ", infinite: "Infinite Mode ♾️", currentTry: "Attempt number: ",
-                win: "You Won! 🎉", lose: "Game Over! Word was: ",
-                dir: "ltr", font: "font-en"
-            }
+            ar: { title: "ابحث على الكلمة", m: "يدوي", r: "تلقائي", labelWord: "الكلمة السرية:", labelAtt: "عدد المحاولات (0 للانهائية):", robotDesc: "سأختار لك كلمة عشوائية!", btnStart: "بدء اللعب", btnGuess: "تحقق", tries: "المحاولات المتبقية: ", infinite: "وضع المحاولات اللانهائية ♾️", currentTry: "المحاولة رقم: ", win: "مبروك فزت! 🎉", lose: "للأسف خسرت! الكلمة كانت: ", dir: "rtl", font: "font-ar" },
+            en: { title: "Word Finder", m: "Manual", r: "AI Mode", labelWord: "Secret Word:", labelAtt: "Attempts (0 for infinite):", robotDesc: "I'll pick a word for you!", btnStart: "Start Game", btnGuess: "Check", tries: "Tries left: ", infinite: "Infinite Mode ♾️", currentTry: "Attempt number: ", win: "You Won! 🎉", lose: "Game Over! Word was: ", dir: "ltr", font: "font-en" }
         };
 
         let currentUI = 'ar';
@@ -153,6 +139,18 @@
         let currentGuess = [];
         let letterStates = {};
 
+        function toggleVisibility() {
+            const input = document.getElementById('secret-input');
+            const icon = document.getElementById('toggleIcon');
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.replace("bi-eye-slash", "bi-eye");
+            } else {
+                input.type = "password";
+                icon.classList.replace("bi-eye", "bi-eye-slash");
+            }
+        }
+
         function setUILang(l) {
             currentUI = l;
             const t = translations[l];
@@ -162,7 +160,6 @@
             document.getElementById('ui-ar').classList.toggle('text-white', l === 'ar');
             document.getElementById('ui-en').classList.toggle('bg-amber-700', l === 'en');
             document.getElementById('ui-en').classList.toggle('text-white', l === 'en');
-            
             document.getElementById('txt-title').textContent = t.title;
             document.getElementById('txt-m').textContent = t.m;
             document.getElementById('txt-r').textContent = t.r;
@@ -194,7 +191,7 @@
                 document.getElementById('txt-tries-left').textContent = t.infinite + " | " + t.currentTry + (guesses.length + 1);
             } else {
                 const left = maxTries - guesses.length;
-                document.getElementById('txt-tries-left').textContent = t.tries + left;
+                document.getElementById('txt-tries-left').textContent = t.tries + (left < 0 ? 0 : left);
             }
         }
 
@@ -204,15 +201,12 @@
                 maxTries = parseInt(document.getElementById('attempts-input').value);
                 if (isNaN(maxTries)) maxTries = 6;
             } else {
-                const listAR = ["كتاب", "سماء", "نور", "تفاح", "قلم", "مدرسة", "بحر"];
-                const listEN = ["apple", "bread", "cloud", "dance", "earth", "world", "house"];
-                secretWord = (robotLang === 'en' ? listEN : listAR)[Math.floor(Math.random() * listAR.length)];
+                const pool = (robotLang === 'en' ? ["apple", "bread", "cloud", "dance", "earth", "world", "house"] : ["كتاب", "سماء", "نور", "تفاح", "قلم", "مدرسة", "بحر"]);
+                secretWord = pool[Math.floor(Math.random() * pool.length)];
                 maxTries = 6;
             }
-
             if (!secretWord) return;
-            guesses = [];
-            letterStates = {};
+            guesses = []; letterStates = {};
             currentGuess = new Array(secretWord.length).fill("");
             document.getElementById('setup-screen').classList.add('hidden');
             document.getElementById('game-screen').classList.remove('hidden');
@@ -221,29 +215,24 @@
         }
 
         function initGameUI(isEn) {
-            const row = document.getElementById('input-row');
-            row.innerHTML = '';
+            const row = document.getElementById('input-row'); row.innerHTML = '';
             for (let i = 0; i < secretWord.length; i++) {
                 const b = document.createElement('div');
                 b.className = `letter-box ${isEn ? 'font-en' : 'font-ar'}`;
-                b.id = `box-${i}`;
-                row.appendChild(b);
+                b.id = `box-${i}`; row.appendChild(b);
             }
             renderKeyboard(isEn);
         }
 
         function renderKeyboard(isEn) {
-            const kb = document.getElementById('keyboard');
-            kb.innerHTML = '';
+            const kb = document.getElementById('keyboard'); kb.innerHTML = '';
             const layout = isEn ? [["Q","W","E","R","T","Y","U","I","O","P"], ["A","S","D","F","G","H","J","K","L"], ["Z","X","C","V","B","N","M","DEL"]] : [["ض","ص","ث","ق","ف","غ","ع","ه","خ","ح","ج","د"], ["ش","س","ي","ب","ل","ا","ت","ن","م","ك","ط"], ["ئ","ء","ؤ","ر","ى","ة","و","ز","ظ","ذ","مسح"]];
             layout.forEach(row => {
-                const rDiv = document.createElement('div');
-                rDiv.className = "flex w-full justify-center";
+                const rDiv = document.createElement('div'); rDiv.className = "flex w-full justify-center";
                 row.forEach(k => {
                     const btn = document.createElement('button');
                     const charStatus = letterStates[k.toLowerCase()];
-                    btn.className = `keyboard-key ${isEn ? 'font-en' : 'font-ar'}`;
-                    if(charStatus) btn.classList.add(charStatus);
+                    btn.className = `keyboard-key ${isEn ? 'font-en' : 'font-ar'} ${charStatus || ''}`;
                     btn.textContent = k;
                     btn.onclick = () => {
                         if (charStatus === 'absent') return;
@@ -266,54 +255,34 @@
             const guessStr = currentGuess.join('');
             const res = new Array(secretWord.length).fill('absent');
             const sArr = secretWord.split('');
-
-            currentGuess.forEach((c, i) => {
-                if (c === sArr[i]) { res[i] = 'correct'; sArr[i] = null; letterStates[c] = 'correct'; }
-            });
+            currentGuess.forEach((c, i) => { if (c === sArr[i]) { res[i] = 'correct'; sArr[i] = null; letterStates[c] = 'correct'; } });
             currentGuess.forEach((c, i) => {
                 if (res[i] === 'absent' && sArr.includes(c)) {
                     res[i] = 'present'; sArr[sArr.indexOf(c)] = null;
                     if (letterStates[c] !== 'correct') letterStates[c] = 'present';
-                } else if (res[i] === 'absent') {
-                    if (!letterStates[c]) letterStates[c] = 'absent';
-                }
+                } else if (res[i] === 'absent' && !letterStates[c]) { letterStates[c] = 'absent'; }
             });
-
             guesses.push({ word: guessStr, res });
-            renderGrid();
-            renderKeyboard(/^[a-zA-Z]+$/.test(secretWord));
-            updateTriesDisplay();
-            
-            if (guessStr === secretWord) {
-                alert(translations[currentUI].win);
-                location.reload();
-            } else if (maxTries !== 0 && guesses.length >= maxTries) {
-                alert(translations[currentUI].lose + secretWord.toUpperCase());
-                location.reload();
-            }
-
-            currentGuess.fill("");
-            for (let i = 0; i < secretWord.length; i++) document.getElementById(`box-${i}`).textContent = "";
+            renderGrid(); renderKeyboard(/^[a-zA-Z]+$/.test(secretWord)); updateTriesDisplay();
+            if (guessStr === secretWord) { alert(translations[currentUI].win); location.reload(); }
+            else if (maxTries !== 0 && guesses.length >= maxTries) { alert(translations[currentUI].lose + secretWord.toUpperCase()); location.reload(); }
+            currentGuess.fill(""); for(let i=0; i<secretWord.length; i++) document.getElementById(`box-${i}`).textContent = "";
         }
 
         function renderGrid() {
-            const container = document.getElementById('grid-container');
-            container.innerHTML = '';
+            const container = document.getElementById('grid-container'); container.innerHTML = '';
             const isEn = /^[a-zA-Z]+$/.test(secretWord);
             guesses.forEach(g => {
-                const r = document.createElement('div');
-                r.className = "flex justify-center gap-1";
+                const r = document.createElement('div'); r.className = "flex justify-center gap-1";
                 g.word.split('').forEach((char, i) => {
                     const b = document.createElement('div');
                     b.className = `letter-box ${g.res[i]} ${isEn ? 'font-en' : 'font-ar'}`;
-                    b.textContent = char.toUpperCase();
-                    r.appendChild(b);
+                    b.textContent = char.toUpperCase(); r.appendChild(b);
                 });
                 container.appendChild(r);
             });
             container.scrollTop = container.scrollHeight;
         }
-
         setUILang('ar');
     </script>
 </body>
